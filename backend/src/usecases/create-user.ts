@@ -12,10 +12,9 @@ export class CreateUser implements UseCase {
   ) {}
 
   async perform(user: User, candidateToken: string): Promise<User> {
-    console.log({ user });
     const candidate = await this.candidateRepository.findByToken(candidateToken);
     if (!candidate) throw new UnauthorizedError();
-    console.log('churros');
+
     const existingUser = await this.userRepository.findByEmail(user.email, candidate.id);
     if (existingUser) throw new ExistingUserError(user.email);
 

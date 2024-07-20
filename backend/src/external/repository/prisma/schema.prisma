@@ -13,6 +13,7 @@ model BikeRentHistory {
   bikeId      Int
   candidateId Int
   status      String
+  cost        Int
   rentDate    DateTime
   returnDate  DateTime
   bike        Bike     @relation(fields: [bikeId], references: [id])

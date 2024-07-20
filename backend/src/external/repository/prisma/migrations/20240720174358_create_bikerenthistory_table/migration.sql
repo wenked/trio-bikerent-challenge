@@ -2,7 +2,7 @@
 CREATE TABLE `BikeRentHistory` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `bikeId` INTEGER NOT NULL,
-    `candidatedId` INTEGER NOT NULL,
+    `candidateId` INTEGER NOT NULL,
     `status` VARCHAR(191) NOT NULL,
     `rentDate` DATETIME(3) NOT NULL,
     `returnDate` DATETIME(3) NOT NULL,

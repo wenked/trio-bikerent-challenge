@@ -11,14 +11,14 @@ generator client {
 model BikeRentHistory {
   id          Int      @unique @default(autoincrement())
   bikeId      Int
-  candidatedId      Int
+  candidateId Int
   status      String
   rentDate    DateTime
   returnDate  DateTime
   bike        Bike     @relation(fields: [bikeId], references: [id])
-  candidate        Candidate     @relation(fields: [candidatedId], references: [id])
+  candidate        Candidate     @relation(fields: [candidateId], references: [id])
 
-  @@id([id, bikeId, candidatedId])
+  @@id([id, bikeId, candidateId])
 
 }
 

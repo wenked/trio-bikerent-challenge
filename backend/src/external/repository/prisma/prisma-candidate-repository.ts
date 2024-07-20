@@ -1,6 +1,6 @@
-import { CandidateRepository } from '@/usecases/ports/candidate-repository';
 import prismaClient from '@/external/repository/prisma/prisma-client';
 import { Candidate } from '@/usecases/datatypes/candidate';
+import { CandidateRepository } from '@/usecases/ports/candidate-repository';
 
 export class PrismaCandidateRepository implements CandidateRepository {
   async add(candidate: Candidate): Promise<Candidate> {
@@ -22,10 +22,14 @@ export class PrismaCandidateRepository implements CandidateRepository {
   }
 
   async findByToken(token: string): Promise<Candidate | undefined> {
+    console.log({ token });
     const candidate = await prismaClient.candidate.findUnique({
       where: { token },
     });
+
     if (!candidate) return undefined;
+
+    console.log({ candidate });
     return candidate;
   }
 }

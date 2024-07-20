@@ -3,7 +3,7 @@ export interface BikeRentHistory {
   bikeId: number;
   candidateId?: number;
   cost: number;
-  status: string;
+  status?: 'RENTED' | 'RETURNED';
   rentDate: Date;
   returnDate: Date;
 }

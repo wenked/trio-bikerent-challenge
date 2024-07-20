@@ -12,6 +12,7 @@ export class RentBikeController implements Controller {
         body: bikeRentHistory,
       };
     } catch (error) {
+      console.error(error);
       const bikeNotAvailable = error.constructor.name === 'BikeNotAvailableError';
       const userUnauthorized = error.constructor.name === 'UnauthorizedError';
 
@@ -24,6 +25,7 @@ export class RentBikeController implements Controller {
           },
         };
       }
+
       return {
         statusCode: 500,
         body: error,

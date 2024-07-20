@@ -15,16 +15,21 @@ export class CreateBikeRentHistory {
     bikeRentHistory: BikeRentHistory,
     candidateToken: string
   ): Promise<BikeRentHistory> {
+    console.log({ bikeRentHistory, candidateToken });
     const candidate = await this.candidateRepository.findByToken(candidateToken);
+
+    console.log({ candidate });
     if (!candidate) throw new UnauthorizedError();
 
     const existingBikeRentHistory = await this.bikeRentHistoryRepository.findRentedByBikeId(
       bikeRentHistory.bikeId
     );
+    console.log({ existingBikeRentHistory });
 
     if (existingBikeRentHistory) throw new BikeNotAvailableError(bikeRentHistory.bikeId);
 
     bikeRentHistory.candidateId = candidate.id;
+    bikeRentHistory.status = 'RENTED';
 
     const newBikeRentHistory = await this.bikeRentHistoryRepository.add(bikeRentHistory);
     return newBikeRentHistory;

@@ -7,12 +7,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Status {
+  RENTED
+  RETURNED
+}
+
 
 model BikeRentHistory {
   id          Int      @unique @default(autoincrement())
   bikeId      Int
   candidateId Int
-  status      String
+  status      Status  @default(RENTED)
   cost        Int
   rentDate    DateTime
   returnDate  DateTime

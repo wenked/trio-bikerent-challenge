@@ -8,8 +8,8 @@ export class PrismaBikeRentHistoryRepository implements BikeRentHistoryRepositor
     const newBikeRentHistory = await prismaClient.bikeRentHistory.create({
       data: {
         status: bikeRentHistory.status,
-        rentDate: bikeRentHistory.rentDate,
-        returnDate: bikeRentHistory.returnDate,
+        rentDate: new Date(bikeRentHistory.rentDate),
+        returnDate: new Date(bikeRentHistory.returnDate),
         cost: bikeRentHistory.cost,
         bike: {
           connect: {
@@ -24,7 +24,14 @@ export class PrismaBikeRentHistoryRepository implements BikeRentHistoryRepositor
       },
     });
 
-    return newBikeRentHistory;
+    return {
+      status: bikeRentHistory.status,
+      rentDate: bikeRentHistory.rentDate,
+      returnDate: bikeRentHistory.returnDate,
+      cost: bikeRentHistory.cost,
+      bikeId: bikeRentHistory.bikeId,
+      candidateId: bikeRentHistory.candidateId,
+    };
   }
 
   async list(candidateId: number): Promise<BikeRentHistory[]> {
@@ -39,8 +46,7 @@ export class PrismaBikeRentHistoryRepository implements BikeRentHistoryRepositor
     return await prismaClient.bikeRentHistory.findMany({
       where: {
         candidateId,
-        status: 'rented',
-        OR: [{ returnDate: null }, { returnDate: { gt: new Date() } }],
+        status: 'RENTED',
       },
     });
   }
@@ -49,8 +55,7 @@ export class PrismaBikeRentHistoryRepository implements BikeRentHistoryRepositor
     return await prismaClient.bikeRentHistory.findFirst({
       where: {
         bikeId,
-        status: 'rented',
-        OR: [{ returnDate: null }, { returnDate: { gt: new Date() } }],
+        status: 'RENTED',
       },
     });
   }

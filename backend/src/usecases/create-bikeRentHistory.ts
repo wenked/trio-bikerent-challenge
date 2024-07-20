@@ -2,7 +2,7 @@ import { BikeRentHistory } from '@/usecases/datatypes/bikeRentHistory';
 import { BikeRentHistoryRepository } from '@/usecases/ports/bikeRentHistory-repository';
 import { CandidateRepository } from '@/usecases/ports/candidate-repository';
 
-import { BikeIsRentedError } from './errors/bike-is-rented-error';
+import { BikeNotAvailableError } from './errors/bike-not-available-error';
 import { UnauthorizedError } from './errors/unauthorized-error';
 
 export class CreateBikeRentHistory {
@@ -22,7 +22,9 @@ export class CreateBikeRentHistory {
       bikeRentHistory.bikeId
     );
 
-    if (existingBikeRentHistory) throw new BikeIsRentedError(bikeRentHistory.bikeId);
+    if (existingBikeRentHistory) throw new BikeNotAvailableError(bikeRentHistory.bikeId);
+
+    bikeRentHistory.candidateId = candidate.id;
 
     const newBikeRentHistory = await this.bikeRentHistoryRepository.add(bikeRentHistory);
     return newBikeRentHistory;

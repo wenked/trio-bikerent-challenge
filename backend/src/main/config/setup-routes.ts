@@ -5,6 +5,7 @@ import { makeListAvailableBikesController } from '@/main/factories/make-list-ava
 import { makeListBikesController } from '@/main/factories/make-list-bikes-controller';
 import { makeListUsersController } from '@/main/factories/make-list-users-controller';
 import { Express, Router } from 'express';
+import { makeRentBikeController } from '../factories/make-rent-bike-controller';
 
 export function setupRoutes(app: Express): void {
   const router = Router();
@@ -14,6 +15,7 @@ export function setupRoutes(app: Express): void {
   createListUsersRoute(router);
   createCreateUserRoute(router);
   createCreateCandidateRoute(router);
+  rentBikeRoute(router);
 }
 
 function createListBikesRoute(router: Router) {
@@ -24,12 +26,15 @@ function createListAvailableBikesRoute(router: Router) {
   router.get('/bikes/available', adaptRoute(makeListAvailableBikesController()));
 }
 
+function rentBikeRoute(router: Router) {
+  router.post('/bikes/rent', adaptRoute(makeRentBikeController()));
+}
+
 function createListUsersRoute(router: Router) {
   router.get('/users', adaptRoute(makeListUsersController()));
 }
 
 function createCreateUserRoute(router: Router) {
-  
   router.post('/users', adaptRoute(makeCreateUserController()));
 }
 

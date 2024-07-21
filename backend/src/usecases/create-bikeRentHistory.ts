@@ -4,11 +4,13 @@ import { CandidateRepository } from '@/usecases/ports/candidate-repository';
 
 import { BikeNotAvailableError } from './errors/bike-not-available-error';
 import { UnauthorizedError } from './errors/unauthorized-error';
+import { BikeRepository } from './ports/bike-repository';
 
 export class CreateBikeRentHistory {
   constructor(
     private readonly bikeRentHistoryRepository: BikeRentHistoryRepository,
-    private readonly candidateRepository: CandidateRepository
+    private readonly candidateRepository: CandidateRepository,
+    private readonly bikeRepository: BikeRepository
   ) {}
 
   async perform(
@@ -27,6 +29,8 @@ export class CreateBikeRentHistory {
     console.log({ existingBikeRentHistory });
 
     if (existingBikeRentHistory) throw new BikeNotAvailableError(bikeRentHistory.bikeId);
+
+    const bike = await this.bikeRepository.findById(bikeRentHistory.bikeId);
 
     bikeRentHistory.candidateId = candidate.id;
     bikeRentHistory.status = 'RENTED';

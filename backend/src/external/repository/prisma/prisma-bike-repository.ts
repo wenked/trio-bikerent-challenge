@@ -1,6 +1,6 @@
+import prismaClient from '@/external/repository/prisma/prisma-client';
 import { Bike } from '@/usecases/datatypes/bike';
 import { BikeRepository } from '@/usecases/ports/bike-repository';
-import prismaClient from '@/external/repository/prisma/prisma-client';
 
 export class PrismaBikeRepository implements BikeRepository {
   async list(candidateId: number): Promise<Bike[]> {
@@ -31,6 +31,22 @@ export class PrismaBikeRepository implements BikeRepository {
       if (bikeIsAvailable) availableBikes.push(bike);
     });
     return availableBikes;
+  }
+
+  async findById(bikeId: number): Promise<Bike> {
+    const bike = await prismaClient.bike.findUnique({
+      where: {
+        id: bikeId,
+      },
+      include: {
+        imageUrls: true,
+      },
+    });
+
+    if (!bike) throw new Error('Bike not found');
+
+    const imageUrls = bike.imageUrls.map((imageUrlRecord) => imageUrlRecord.url);
+    return { ...bike, imageUrls };
   }
 
   async add(bike: Bike): Promise<Bike> {

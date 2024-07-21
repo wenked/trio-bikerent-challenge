@@ -175,4 +175,43 @@ describe('BikeRentHistory prisma repository', () => {
       })
     );
   });
+
+  it('shoud be able to create a bikeRentHistory', async () => {
+    await clearPrismaDatabase();
+
+    const candidateRepo = new PrismaCandidateRepository();
+    const bikeRepo = new PrismaBikeRepository();
+    const bikeRentHistoryRepo = new PrismaBikeRentHistoryRepository();
+
+    const candidate = await candidateRepo.add({
+      name: 'any_name',
+      email: 'any_email',
+      token: 'any_token',
+    });
+
+    const bikeInfo = new BikeBuilder().build();
+
+    const bike = await bikeRepo.add({
+      candidateId: candidate.id,
+      ...bikeInfo,
+    });
+
+    const bikeRentHistory = await bikeRentHistoryRepo.add({
+      bikeId: bike.id,
+      candidateId: candidate.id,
+      status: 'RENTED',
+      rentDate: new Date(),
+      returnDate: new Date(),
+      cost: 10,
+    });
+
+    expect(bikeRentHistory).toEqual(
+      expect.objectContaining({
+        bikeId: bike.id,
+        candidateId: candidate.id,
+        status: 'RENTED',
+        cost: 10,
+      })
+    );
+  });
 });

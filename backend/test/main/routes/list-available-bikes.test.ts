@@ -1,9 +1,9 @@
-import app from '@/main/config/app';
-import request from 'supertest';
-import prismaClient from '@/external/repository/prisma/prisma-client';
-import { clearPrismaDatabase } from './clear-database';
-import { BikeBuilder } from '@test/builders/bike-builder';
 import { PrismaBikeRepository } from '@/external/repository/prisma/prisma-bike-repository';
+import prismaClient from '@/external/repository/prisma/prisma-client';
+import app from '@/main/config/app';
+import { BikeBuilder } from '@test/builders/bike-builder';
+import request from 'supertest';
+import { clearPrismaDatabase } from './clear-database';
 
 describe('List available bikes route', () => {
   it('list available bikes should return available bikes and 200', async () => {
@@ -29,5 +29,9 @@ describe('List available bikes route', () => {
         expect(Array.isArray(res.body)).toBeTruthy();
         expect(res.body.length).toBe(1);
       });
+  });
+
+  afterAll(async () => {
+    await clearPrismaDatabase();
   });
 });

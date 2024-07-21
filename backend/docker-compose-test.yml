@@ -1,0 +1,12 @@
+services:
+  mysql_test:
+    image: mysql:8.0.32
+    container_name: mysql-container-test
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_DATABASE: challenge
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - '3307:3307'

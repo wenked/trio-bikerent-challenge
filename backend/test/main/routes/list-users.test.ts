@@ -23,4 +23,8 @@ describe('List users route', () => {
         expect(Array.isArray(res.body)).toBeTruthy();
       });
   });
+
+  afterAll(async () => {
+    await clearPrismaDatabase();
+  });
 });

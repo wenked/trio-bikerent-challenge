@@ -22,4 +22,8 @@ describe('List bikes route', () => {
         expect(Array.isArray(res.body)).toBeTruthy();
       });
   });
+
+  afterAll(async () => {
+    await clearPrismaDatabase();
+  });
 });

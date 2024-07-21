@@ -16,4 +16,8 @@ describe('Create candidate route', () => {
         expect(res.body.token).not.toBeUndefined();
       });
   });
+
+  afterAll(async () => {
+    await clearPrismaDatabase();
+  });
 });

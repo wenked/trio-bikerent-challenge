@@ -214,4 +214,8 @@ describe('BikeRentHistory prisma repository', () => {
       })
     );
   });
+
+  afterAll(async () => {
+    await clearPrismaDatabase();
+  });
 });

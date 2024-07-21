@@ -58,4 +58,8 @@ describe('Rent bike route', () => {
         );
       });
   });
+
+  afterAll(async () => {
+    await clearPrismaDatabase();
+  });
 });

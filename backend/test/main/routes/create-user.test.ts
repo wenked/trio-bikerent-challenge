@@ -29,4 +29,8 @@ describe('Create user route', () => {
         expect(res.body.id).not.toBeUndefined();
       });
   });
+
+  afterAll(async () => {
+    await clearPrismaDatabase();
+  });
 });

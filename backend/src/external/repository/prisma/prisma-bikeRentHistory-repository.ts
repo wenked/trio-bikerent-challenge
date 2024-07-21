@@ -25,6 +25,7 @@ export class PrismaBikeRentHistoryRepository implements BikeRentHistoryRepositor
     });
 
     return {
+      id: newBikeRentHistory.id,
       status: bikeRentHistory.status,
       rentDate: bikeRentHistory.rentDate,
       returnDate: bikeRentHistory.returnDate,
@@ -61,16 +62,33 @@ export class PrismaBikeRentHistoryRepository implements BikeRentHistoryRepositor
   }
 
   async update(bikeRentHistory: BikeRentHistory): Promise<BikeRentHistory> {
+    const updateData = {} as BikeRentHistory;
+
+    if (!bikeRentHistory.id) {
+      throw new Error('BikeRentHistory does not exist');
+    }
+
+    if (bikeRentHistory?.status) {
+      updateData.status = bikeRentHistory.status;
+    }
+
+    if (bikeRentHistory?.rentDate) {
+      updateData.rentDate = bikeRentHistory.rentDate;
+    }
+
+    if (bikeRentHistory?.returnDate) {
+      updateData.returnDate = bikeRentHistory.returnDate;
+    }
+
+    if (bikeRentHistory?.cost) {
+      updateData.cost = bikeRentHistory.cost;
+    }
+
     return await prismaClient.bikeRentHistory.update({
       where: {
-        id: bikeRentHistory.id,
+        id: bikeRentHistory?.id,
       },
-      data: {
-        status: bikeRentHistory.status,
-        rentDate: bikeRentHistory.rentDate,
-        returnDate: bikeRentHistory.returnDate,
-        cost: bikeRentHistory.cost,
-      },
+      data: updateData,
     });
   }
 }

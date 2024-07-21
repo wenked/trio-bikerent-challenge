@@ -3,6 +3,8 @@ import { BikeRentHistoryRepository } from '@/usecases/ports/bikeRentHistory-repo
 import { CandidateRepository } from '@/usecases/ports/candidate-repository';
 
 import { BikeNotAvailableError } from './errors/bike-not-available-error';
+import { BikeNotExistsError } from './errors/bike-not-exists-error';
+import { InvalidRentBikePeriodError } from './errors/invalid-rent-bike-period-error';
 import { UnauthorizedError } from './errors/unauthorized-error';
 import { BikeRepository } from './ports/bike-repository';
 
@@ -25,7 +27,7 @@ export class CreateBikeRentHistory {
 
     const bike = await this.bikeRepository.findById(bikeRentHistory.bikeId);
 
-    if (!bike) throw new BikeNotAvailableError(bikeRentHistory.bikeId);
+    if (!bike) throw new BikeNotExistsError(bikeRentHistory.bikeId);
 
     const existingBikeRentHistory = await this.bikeRentHistoryRepository.findRentedByBikeId(
       bikeRentHistory.bikeId
@@ -41,11 +43,18 @@ export class CreateBikeRentHistory {
     const rentPeriodInDays = Math.ceil(rentPeriod / (1000 * 3600 * 24));
     console.log({ rentPeriodInDays });
 
+    if (rentPeriodInDays < 1) throw new InvalidRentBikePeriodError();
+
     const rentCost = rentPeriodInDays * bike.rate;
     const rentFee = rentCost * 0.15;
     bikeRentHistory.cost = Math.ceil((rentCost + rentFee) * 100); // in cents
 
-    console.log({ rentCost, rentFee, cost: bikeRentHistory.cost });
+    console.log({
+      rentCost,
+      rentFee,
+      cost: bikeRentHistory.cost,
+      convertedCost: bikeRentHistory.cost / 100,
+    });
 
     bikeRentHistory.candidateId = candidate.id;
     bikeRentHistory.status = 'RENTED';

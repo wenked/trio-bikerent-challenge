@@ -43,9 +43,8 @@ describe('Rent bike route', () => {
       .set('authorization', 'a-token')
       .send({
         bikeId: bike.id,
-        cost: 10,
         rentDate: '2024-07-22 00:00:00',
-        returnDate: '2024-07-23 00:00:00',
+        returnDate: '2024-07-24 00:00:00',
       })
       .expect(201)
       .then((res) => {
@@ -54,7 +53,7 @@ describe('Rent bike route', () => {
             bikeId: bike.id,
             candidateId: candidate.id,
             status: 'RENTED',
-            cost: 10,
+            cost: 2300,
           })
         );
       });

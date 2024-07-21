@@ -26,9 +26,8 @@ describe('Create bike rent history use case', () => {
       .withId(1)
       .withBikeId(addedBike.id)
       .withCandidateId(addedCandidate.id)
-      .withCost(10)
-      .withRentDate(new Date())
-      .withReturnDate(new Date())
+      .withRentDate(new Date('2024-07-21 14:00:00'))
+      .withReturnDate(new Date('2024-07-25 14:00:00'))
       .build();
     const createdBikeRentHistory = await useCase.perform(bikeRentHistory, addedCandidate.token);
 
@@ -36,7 +35,7 @@ describe('Create bike rent history use case', () => {
     expect(createdBikeRentHistory.status).toStrictEqual('RENTED');
     expect(createdBikeRentHistory.rentDate).toStrictEqual(bikeRentHistory.rentDate);
     expect(createdBikeRentHistory.returnDate).toStrictEqual(bikeRentHistory.returnDate);
-    expect(createdBikeRentHistory.cost).toStrictEqual(10);
+    expect(createdBikeRentHistory.cost).toStrictEqual(4600);
     expect(createdBikeRentHistory.bikeId).toStrictEqual(addedBike.id);
     expect(createdBikeRentHistory.candidateId).toStrictEqual(candidate.id);
   });

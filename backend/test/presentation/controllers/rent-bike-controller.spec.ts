@@ -44,7 +44,7 @@ describe('Rent bike controller', () => {
     expect(response.body).toEqual({
       id: 1,
       candidateId: candidate.id,
-      cost: 15,
+      cost: 1150,
       bikeId: bike.id,
       status: 'RENTED',
       rentDate: new Date('2024-07-22 00:00:00'),

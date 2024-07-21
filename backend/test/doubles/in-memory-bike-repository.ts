@@ -20,6 +20,12 @@ export class InMemoryBikeRepository implements BikeRepository {
     return availableBikes;
   }
 
+  async findById(bikeId: number): Promise<Bike> {
+    const bike = this.bikes.find((bike) => bike.id === bikeId);
+    if (!bike) throw new Error('Bike not found');
+    return bike;
+  }
+
   async add(bike: Bike): Promise<Bike> {
     const newBike = { ...bike, id: this.currentId++ };
     this.bikes.push(newBike);

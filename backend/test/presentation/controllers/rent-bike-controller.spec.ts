@@ -14,7 +14,11 @@ describe('Rent bike controller', () => {
     const candidateRepository = new InMemoryCandidateRepository();
     const bikeRepository = new InMemoryBikeRepository();
     const bikeRentHistoryRepository = new InMemoryBikeRentHistoryRepository();
-    const useCase = new CreateBikeRentHistory(bikeRentHistoryRepository, candidateRepository);
+    const useCase = new CreateBikeRentHistory(
+      bikeRentHistoryRepository,
+      candidateRepository,
+      bikeRepository
+    );
     const controller: RentBikeController = new RentBikeController(useCase);
 
     const addedCandidate = new CandidateBuilder().withId().withToken().build();
@@ -63,8 +67,13 @@ describe('Rent bike controller', () => {
 
   it('should return 401 if user is unauthorized', async () => {
     const candidateRepository = new InMemoryCandidateRepository();
+    const bikeRepository = new InMemoryBikeRepository();
     const bikeRentHistoryRepository = new InMemoryBikeRentHistoryRepository();
-    const useCase = new CreateBikeRentHistory(bikeRentHistoryRepository, candidateRepository);
+    const useCase = new CreateBikeRentHistory(
+      bikeRentHistoryRepository,
+      candidateRepository,
+      bikeRepository
+    );
     const controller = new RentBikeController(useCase);
 
     const request: HttpRequest = {
@@ -80,7 +89,11 @@ describe('Rent bike controller', () => {
     const candidateRepository = new InMemoryCandidateRepository();
     const bikeRepository = new InMemoryBikeRepository();
     const bikeRentHistoryRepository = new InMemoryBikeRentHistoryRepository();
-    const useCase = new CreateBikeRentHistory(bikeRentHistoryRepository, candidateRepository);
+    const useCase = new CreateBikeRentHistory(
+      bikeRentHistoryRepository,
+      candidateRepository,
+      bikeRepository
+    );
     const controller = new RentBikeController(useCase);
 
     const addedCandidate = new CandidateBuilder().withId().withToken().build();

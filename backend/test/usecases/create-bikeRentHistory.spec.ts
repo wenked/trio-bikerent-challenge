@@ -11,7 +11,11 @@ describe('Create bike rent history use case', () => {
     const candidateRepository = new InMemoryCandidateRepository();
     const bikeRepository = new InMemoryBikeRepository();
     const bikeRentHistoryRepository = new InMemoryBikeRentHistoryRepository();
-    const useCase = new CreateBikeRentHistory(bikeRentHistoryRepository, candidateRepository);
+    const useCase = new CreateBikeRentHistory(
+      bikeRentHistoryRepository,
+      candidateRepository,
+      bikeRepository
+    );
 
     const addedCandidate = new CandidateBuilder().withId().withToken().build();
     const candidate = await candidateRepository.add(addedCandidate);

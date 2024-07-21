@@ -23,6 +23,10 @@ export class CreateBikeRentHistory {
     console.log({ candidate });
     if (!candidate) throw new UnauthorizedError();
 
+    const bike = await this.bikeRepository.findById(bikeRentHistory.bikeId);
+
+    if (!bike) throw new BikeNotAvailableError(bikeRentHistory.bikeId);
+
     const existingBikeRentHistory = await this.bikeRentHistoryRepository.findRentedByBikeId(
       bikeRentHistory.bikeId
     );
@@ -30,7 +34,18 @@ export class CreateBikeRentHistory {
 
     if (existingBikeRentHistory) throw new BikeNotAvailableError(bikeRentHistory.bikeId);
 
-    const bike = await this.bikeRepository.findById(bikeRentHistory.bikeId);
+    const returnDate = new Date(bikeRentHistory.returnDate);
+    const rentDate = new Date(bikeRentHistory.rentDate);
+    const rentPeriod = returnDate.getTime() - rentDate.getTime();
+
+    const rentPeriodInDays = Math.ceil(rentPeriod / (1000 * 3600 * 24));
+    console.log({ rentPeriodInDays });
+
+    const rentCost = rentPeriodInDays * bike.rate;
+    const rentFee = rentCost * 0.15;
+    bikeRentHistory.cost = Math.ceil((rentCost + rentFee) * 100); // in cents
+
+    console.log({ rentCost, rentFee, cost: bikeRentHistory.cost });
 
     bikeRentHistory.candidateId = candidate.id;
     bikeRentHistory.status = 'RENTED';

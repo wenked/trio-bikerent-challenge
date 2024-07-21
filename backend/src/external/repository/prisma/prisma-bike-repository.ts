@@ -43,7 +43,7 @@ export class PrismaBikeRepository implements BikeRepository {
       },
     });
 
-    if (!bike) throw new Error('Bike not found');
+    if (!bike) return undefined;
 
     const imageUrls = bike.imageUrls.map((imageUrlRecord) => imageUrlRecord.url);
     return { ...bike, imageUrls };

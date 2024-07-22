@@ -1,4 +1,4 @@
-import { CreateBikeRentHistory } from '@/usecases/create-bikeRentHistory';
+import { RentBike } from '@/usecases/rent-bike';
 import { BikeBuilder } from '@test/builders/bike-builder';
 import { BikeRentHistoryBuilder } from '@test/builders/bikeRentHistory-builder';
 import { CandidateBuilder } from '@test/builders/candidate-builder';
@@ -11,11 +11,7 @@ describe('Create bike rent history use case', () => {
     const candidateRepository = new InMemoryCandidateRepository();
     const bikeRepository = new InMemoryBikeRepository();
     const bikeRentHistoryRepository = new InMemoryBikeRentHistoryRepository();
-    const useCase = new CreateBikeRentHistory(
-      bikeRentHistoryRepository,
-      candidateRepository,
-      bikeRepository
-    );
+    const useCase = new RentBike(bikeRentHistoryRepository, candidateRepository, bikeRepository);
 
     const addedCandidate = new CandidateBuilder().withId().withToken().build();
     const candidate = await candidateRepository.add(addedCandidate);

@@ -8,7 +8,7 @@ import { InvalidRentBikePeriodError } from './errors/invalid-rent-bike-period-er
 import { UnauthorizedError } from './errors/unauthorized-error';
 import { BikeRepository } from './ports/bike-repository';
 
-export class CreateBikeRentHistory {
+export class RentBike {
   constructor(
     private readonly bikeRentHistoryRepository: BikeRentHistoryRepository,
     private readonly candidateRepository: CandidateRepository,

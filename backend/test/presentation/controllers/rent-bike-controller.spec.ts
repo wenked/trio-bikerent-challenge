@@ -1,7 +1,7 @@
 import { HttpRequest } from '@/presentation/controllers/ports/http-request';
 import { HttpResponse } from '@/presentation/controllers/ports/http-response';
 import { RentBikeController } from '@/presentation/controllers/rent-bike-controller';
-import { CreateBikeRentHistory } from '@/usecases/create-bikeRentHistory';
+import { RentBike } from '@/usecases/rent-bike';
 import { BikeBuilder } from '@test/builders/bike-builder';
 import { CandidateBuilder } from '@test/builders/candidate-builder';
 import { ErrorThrowingUseCaseStub } from '@test/doubles/error-throwing-use-case-stub';
@@ -14,11 +14,7 @@ describe('Rent bike controller', () => {
     const candidateRepository = new InMemoryCandidateRepository();
     const bikeRepository = new InMemoryBikeRepository();
     const bikeRentHistoryRepository = new InMemoryBikeRentHistoryRepository();
-    const useCase = new CreateBikeRentHistory(
-      bikeRentHistoryRepository,
-      candidateRepository,
-      bikeRepository
-    );
+    const useCase = new RentBike(bikeRentHistoryRepository, candidateRepository, bikeRepository);
     const controller: RentBikeController = new RentBikeController(useCase);
 
     const addedCandidate = new CandidateBuilder().withId().withToken().build();
@@ -69,11 +65,7 @@ describe('Rent bike controller', () => {
     const candidateRepository = new InMemoryCandidateRepository();
     const bikeRepository = new InMemoryBikeRepository();
     const bikeRentHistoryRepository = new InMemoryBikeRentHistoryRepository();
-    const useCase = new CreateBikeRentHistory(
-      bikeRentHistoryRepository,
-      candidateRepository,
-      bikeRepository
-    );
+    const useCase = new RentBike(bikeRentHistoryRepository, candidateRepository, bikeRepository);
     const controller = new RentBikeController(useCase);
 
     const request: HttpRequest = {
@@ -89,11 +81,7 @@ describe('Rent bike controller', () => {
     const candidateRepository = new InMemoryCandidateRepository();
     const bikeRepository = new InMemoryBikeRepository();
     const bikeRentHistoryRepository = new InMemoryBikeRentHistoryRepository();
-    const useCase = new CreateBikeRentHistory(
-      bikeRentHistoryRepository,
-      candidateRepository,
-      bikeRepository
-    );
+    const useCase = new RentBike(bikeRentHistoryRepository, candidateRepository, bikeRepository);
     const controller = new RentBikeController(useCase);
 
     const addedCandidate = new CandidateBuilder().withId().withToken().build();

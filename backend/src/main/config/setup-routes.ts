@@ -6,6 +6,7 @@ import { makeListBikesController } from '@/main/factories/make-list-bikes-contro
 import { makeListUsersController } from '@/main/factories/make-list-users-controller';
 import { Express, Router } from 'express';
 import { makeRentBikeController } from '../factories/make-rent-bike-controller';
+import { makeReturnBikeController } from '../factories/make-return-bike-controller';
 
 export function setupRoutes(app: Express): void {
   const router = Router();
@@ -16,6 +17,7 @@ export function setupRoutes(app: Express): void {
   createCreateUserRoute(router);
   createCreateCandidateRoute(router);
   rentBikeRoute(router);
+  returnBikeRoute(router);
 }
 
 function createListBikesRoute(router: Router) {
@@ -28,6 +30,10 @@ function createListAvailableBikesRoute(router: Router) {
 
 function rentBikeRoute(router: Router) {
   router.post('/bikes/rent', adaptRoute(makeRentBikeController()));
+}
+
+function returnBikeRoute(router: Router) {
+  router.post('/bikes/return', adaptRoute(makeReturnBikeController()));
 }
 
 function createListUsersRoute(router: Router) {

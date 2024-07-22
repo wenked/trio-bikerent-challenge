@@ -6,9 +6,10 @@ export class ReturnBikeController implements Controller {
 
   async handle(request: HttpRequest): Promise<any> {
     try {
-      const bikeRentHistory = await this.useCase.perform(request.body, request.token);
+      const bikeRentHistoryId = request.body.bikeRentHistoryId;
+      const bikeRentHistory = await this.useCase.perform(bikeRentHistoryId, request.token);
       return {
-        statusCode: 201,
+        statusCode: 200,
         body: bikeRentHistory,
       };
     } catch (error) {

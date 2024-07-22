@@ -93,6 +93,47 @@ describe('BikeRentHistory prisma repository', () => {
     );
   });
 
+  it('should be able to find bikeRentHistory by id', async () => {
+    await clearPrismaDatabase();
+
+    const candidateRepo = new PrismaCandidateRepository();
+    const bikeRepo = new PrismaBikeRepository();
+    const bikeRentHistoryRepo = new PrismaBikeRentHistoryRepository();
+
+    const candidate = await candidateRepo.add({
+      name: 'any_name',
+      email: 'any_email',
+      token: 'any_token',
+    });
+
+    const bikeInfo = new BikeBuilder().build();
+
+    const bike = await bikeRepo.add({
+      candidateId: candidate.id,
+      ...bikeInfo,
+    });
+
+    const bikeRentHistory = await bikeRentHistoryRepo.add({
+      bikeId: bike.id,
+      candidateId: candidate.id,
+      status: 'RENTED',
+      rentDate: new Date(),
+      returnDate: new Date(),
+      cost: 10,
+    });
+
+    const foundBikeRentHistory = await bikeRentHistoryRepo.findById(bikeRentHistory.id);
+
+    expect(foundBikeRentHistory).toEqual(
+      expect.objectContaining({
+        bikeId: bike.id,
+        candidateId: candidate.id,
+        status: 'RENTED',
+        cost: 10,
+      })
+    );
+  });
+
   it('should be able to find rented bikeRentHistory by bikeId', async () => {
     await clearPrismaDatabase();
 

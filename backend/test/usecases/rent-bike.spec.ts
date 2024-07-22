@@ -6,7 +6,7 @@ import { InMemoryBikeRepository } from '@test/doubles/in-memory-bike-repository'
 import { InMemoryBikeRentHistoryRepository } from '@test/doubles/in-memory-bikeRentHistory-repository';
 import { InMemoryCandidateRepository } from '@test/doubles/in-memory-candidate-repository';
 
-describe('Create bike rent history use case', () => {
+describe('Rent bike history use case', () => {
   it('should create a bike rent history', async () => {
     const candidateRepository = new InMemoryCandidateRepository();
     const bikeRepository = new InMemoryBikeRepository();

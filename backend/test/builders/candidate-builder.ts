@@ -11,8 +11,13 @@ export class CandidateBuilder {
     return this;
   }
 
-  withId(): CandidateBuilder {
-    this.candidate.id = 1;
+  withId(id?: number): CandidateBuilder {
+    if (!id) {
+      this.candidate.id = 1;
+      return this;
+    }
+
+    this.candidate.id = id;
     return this;
   }
 

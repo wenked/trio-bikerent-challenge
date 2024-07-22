@@ -1,25 +1,45 @@
+import { BOILERPLATE_CANDIDATE_TOKEN } from 'config'
 import Bike from 'models/Bike'
 import { useEffect, useState } from 'react'
-import apiClient from 'services/api'
-import Home from './Home.component'
-import { BOILERPLATE_CANDIDATE_TOKEN } from 'config'
+import { getAllBikes } from 'services/bikes.service'
 
+import CustomSnackBar from 'components/CustomSnackBar/CustomSnackBar.component'
+import Home from './Home.component'
 
 const HomeContainer = () => {
   const [bikes, setBikes] = useState<Bike[]>([])
+  const [error, setError] = useState(false)
+
+  const handleClose = () => {
+    setError(false)
+  }
+
+  const handleGetAllBikes = async () => {
+    try {
+      const bikes = await getAllBikes()
+
+      setBikes(bikes)
+    } catch (error) {
+      console.error(error)
+      setError(true)
+    }
+  }
 
   useEffect(() => {
-    const getAllBikes = async () => {
-      const response = await apiClient.get('/bikes')
-      setBikes(response.data)
-    }
-
-    getAllBikes()
+    handleGetAllBikes()
   }, [])
 
-
-
-  return <Home appIsNotConfigured={!BOILERPLATE_CANDIDATE_TOKEN} bikes={bikes} />
+  return (
+    <>
+      <CustomSnackBar
+        open={error}
+        onClose={handleClose}
+        message='An error occurred while trying to fetch bikes'
+        severity='error'
+      />
+      <Home appIsNotConfigured={!BOILERPLATE_CANDIDATE_TOKEN} bikes={bikes} />
+    </>
+  )
 }
 
 export default HomeContainer

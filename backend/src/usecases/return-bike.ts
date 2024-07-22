@@ -10,13 +10,13 @@ export class ReturnBike {
     private readonly candidateRepository: CandidateRepository
   ) {}
 
-  async perform(bikeId: number, candidateToken: string): Promise<BikeRentHistory> {
+  async perform(id: number, candidateToken: string): Promise<BikeRentHistory> {
     const candidate = await this.candidateRepository.findByToken(candidateToken);
 
     console.log({ candidate });
     if (!candidate) throw new UnauthorizedError();
 
-    const bikeRentHistory = await this.bikeRentHistoryRepository.findRentedByBikeId(bikeId);
+    const bikeRentHistory = await this.bikeRentHistoryRepository.findById(id);
 
     if (!bikeRentHistory) throw new RentedBikeNotFoundError();
 

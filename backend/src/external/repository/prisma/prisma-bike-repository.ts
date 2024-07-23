@@ -23,7 +23,13 @@ export class PrismaBikeRepository implements BikeRepository {
   }
 
   async listAvailable(candidateId: number): Promise<Bike[]> {
-    const openRents = [];
+    const openRents = await prismaClient.bikeRentHistory.findMany({
+      where: {
+        candidateId,
+        status: 'RENTED',
+      },
+    });
+
     const allBikes = await this.list(candidateId);
     const availableBikes: Bike[] = [];
     allBikes.forEach((bike) => {

@@ -1,5 +1,5 @@
-import ImageToSelect from './components/ImageToSelect'
 import { Container } from './BikeImageList.styles'
+import ImageToSelect from './components/ImageToSelect'
 
 interface BikeImageSelectorComponentProps {
   selectedImageUrl: string
@@ -13,23 +13,25 @@ const BikeImageSelector = ({
   selectedImageIndex,
   imageUrls,
   handleSelectImage,
-}: BikeImageSelectorComponentProps) => (
-  <Container data-testid='bike-images-list'>
-    {imageUrls.map((imageUrl, index) => {
-      const imageUniqueId = `${imageUrl}-${index}`
-      const isSelected = imageUrl === selectedImageUrl && index === selectedImageIndex
+}: BikeImageSelectorComponentProps) => {
+  return (
+    <Container data-testid='bike-images-list'>
+      {imageUrls.map((imageUrl, index) => {
+        const imageUniqueId = `${imageUrl}-${index}`
+        const isSelected = imageUrl === selectedImageUrl && index === selectedImageIndex
 
-      return (
-        <ImageToSelect
-          key={imageUniqueId}
-          imageUrl={imageUrl}
-          index={index}
-          isSelected={isSelected}
-          handleSelectImage={handleSelectImage}
-        />
-      )
-    })}
-  </Container>
-)
+        return (
+          <ImageToSelect
+            key={imageUniqueId}
+            imageUrl={imageUrl}
+            index={index}
+            isSelected={isSelected}
+            handleSelectImage={handleSelectImage}
+          />
+        )
+      })}
+    </Container>
+  )
+}
 
 export default BikeImageSelector

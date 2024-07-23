@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
 import { mockedBike } from 'mocks/Bike'
+import { BrowserRouter } from 'react-router-dom'
+import BikeDetails from './BikeDetails.component'
 import { SERVICE_FEE_PERCENTAGE } from './BikeDetails.contants'
 import { getServicesFee } from './BikeDetails.utils'
-import BikeDetails from './BikeDetails.component'
 
 describe('BikeDetails page', () => {
   beforeEach(() => {

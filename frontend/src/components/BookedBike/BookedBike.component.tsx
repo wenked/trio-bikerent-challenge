@@ -10,7 +10,7 @@ interface BookedBikeProps {
 const BookedBike = ({ bike }: BookedBikeProps) => {
   console.log({ bike })
   return (
-    <BookedBikeContainer>
+    <BookedBikeContainer data-testid='booked-bike'>
       <Typography fontWeight={800} fontSize={24} letterSpacing={1}>
         Thank you!
       </Typography>

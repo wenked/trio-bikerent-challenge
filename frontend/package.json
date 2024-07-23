@@ -52,6 +52,11 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!axios)/"
+    ]
+  },
   "devDependencies": {
     "@types/react-date-range": "^1.4.9",
     "@types/react-router-dom": "^5.3.3",

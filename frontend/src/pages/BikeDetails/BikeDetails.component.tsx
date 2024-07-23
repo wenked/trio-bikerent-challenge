@@ -6,8 +6,9 @@ import BookingAddressMap from 'components/BookingAddressMap'
 import CustomDateRangePicker from 'components/CustomDateRangePicker/CustomDateRangePicker.component'
 import Header from 'components/Header'
 import Bike from 'models/Bike'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import BookedBike from 'components/BookedBike/BookedBike.component'
 import { differenceInDays } from 'date-fns'
 import { Range, RangeKeyDict } from 'react-date-range'
 import {
@@ -23,23 +24,23 @@ import {
   OverviewContainer,
   PriceRow,
 } from './BikeDetails.styles'
-import { getServicesFee } from './BikeDetails.utils'
+import { formatToMonetaryValue, getServicesFee } from './BikeDetails.utils'
 
 interface BikeDetailsProps {
   bike?: Bike
 }
 
 const BikeDetails = ({ bike }: BikeDetailsProps) => {
-  const [openBookingSettings, setOpenBookingSettings] = useState(false)
+  const [bookedBike, setBookedBike] = useState(false)
   const [selectedRange, setSelectedRange] = useState<Range>({
     startDate: new Date(),
     endDate: new Date(),
     key: 'selection',
   })
 
-  const [servicesFee, setServicesFee] = useState('0')
-  const [subtotal, setSubtotal] = useState('0')
-  const [total, setTotal] = useState('0')
+  const [servicesFee, setServicesFee] = useState(0)
+  const [subtotal, setSubtotal] = useState(0)
+  const [total, setTotal] = useState(0)
 
   const handleDateRangeChange = (ranges: RangeKeyDict) => {
     setSelectedRange(ranges.selection)
@@ -49,22 +50,28 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
 
       const price = rentDays * bike.rate || 0
 
-      setSubtotal(price.toFixed(2))
+      setSubtotal(price)
       const fee = getServicesFee(price)
-      setServicesFee(fee.toFixed(2))
+      setServicesFee(fee)
 
       const total = price + fee
       console.log({ price, fee, total })
-      setTotal(total.toFixed(2))
+      setTotal(total)
       console.log({ rentDays })
     }
   }
 
-  const rateByDay = bike?.rate || 0
-  const rateByWeek = rateByDay * 7
+  const rateByDay = formatToMonetaryValue(bike?.rate || 0)
+  const rateByWeek = formatToMonetaryValue((bike?.rate || 0) * 7)
 
-  // const servicesFee = getServicesFee(rateByDay)
-  // const total = rateByDay + servicesFee
+  useEffect(() => {
+    if (bike) {
+      const currentFee = getServicesFee(bike.rate || 0)
+      setServicesFee(currentFee)
+      setSubtotal(bike.rate || 0)
+      setTotal(bike.rate || 0 + currentFee)
+    }
+  }, [bike])
 
   return (
     <div data-testid='bike-details-page'>
@@ -122,14 +129,14 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
             <PriceRow>
               <Typography>Day</Typography>
               <Typography fontWeight={800} fontSize={24} letterSpacing={1}>
-                {rateByDay} €
+                {rateByDay}
               </Typography>
             </PriceRow>
 
             <PriceRow>
               <Typography>Week</Typography>
               <Typography fontWeight={800} fontSize={24} letterSpacing={1}>
-                {rateByWeek} €
+                {rateByWeek}
               </Typography>
             </PriceRow>
           </Box>
@@ -145,51 +152,50 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
           </Box>
         </DetailsContainer>
 
-        <OverviewContainer variant='outlined' data-testid='bike-overview-container'>
-          <CustomDateRangePicker selectedRange={selectedRange} onChange={handleDateRangeChange} />
-          <Typography variant='h2' fontSize={16} marginBottom={1.25}>
-            Booking Overview
-          </Typography>
-
-          <Divider />
-
-          <PriceRow marginTop={1.75} data-testid='bike-overview-single-price'>
-            <Box display='flex' alignItems='center'>
-              <Typography marginRight={1}>Subtotal</Typography>
-              <InfoIcon fontSize='small' />
-            </Box>
-
-            <Typography>{subtotal} €</Typography>
-          </PriceRow>
-
-          <PriceRow marginTop={1.5} data-testid='bike-overview-single-price'>
-            <Box display='flex' alignItems='center'>
-              <Typography marginRight={1}>Service Fee</Typography>
-              <InfoIcon fontSize='small' />
-            </Box>
-
-            <Typography>{servicesFee} €</Typography>
-          </PriceRow>
-
-          <PriceRow marginTop={1.75} data-testid='bike-overview-total'>
-            <Typography fontWeight={800} fontSize={16}>
-              Total
+        {bookedBike && bike ? (
+          <BookedBike bike={bike} />
+        ) : (
+          <OverviewContainer variant='outlined' data-testid='bike-overview-container'>
+            <CustomDateRangePicker selectedRange={selectedRange} onChange={handleDateRangeChange} />
+            <Typography variant='h2' fontSize={16} marginBottom={1.25}>
+              Booking Overview
             </Typography>
-            <Typography variant='h2' fontSize={24} letterSpacing={1}>
-              {total} €
-            </Typography>
-          </PriceRow>
+            <Divider />
+            <PriceRow marginTop={1.75} data-testid='bike-overview-single-price'>
+              <Box display='flex' alignItems='center'>
+                <Typography marginRight={1}>Subtotal</Typography>
+                <InfoIcon fontSize='small' />
+              </Box>
 
-          <BookingButton
-            fullWidth
-            disableElevation
-            variant='contained'
-            data-testid='bike-booking-button'
-            onClick={() => setOpenBookingSettings(!openBookingSettings)}
-          >
-            Add to booking
-          </BookingButton>
-        </OverviewContainer>
+              <Typography>{formatToMonetaryValue(subtotal)}</Typography>
+            </PriceRow>
+            <PriceRow marginTop={1.5} data-testid='bike-overview-single-price'>
+              <Box display='flex' alignItems='center'>
+                <Typography marginRight={1}>Service Fee</Typography>
+                <InfoIcon fontSize='small' />
+              </Box>
+
+              <Typography>{formatToMonetaryValue(servicesFee)}</Typography>
+            </PriceRow>
+            <PriceRow marginTop={1.75} data-testid='bike-overview-total'>
+              <Typography fontWeight={800} fontSize={16}>
+                Total
+              </Typography>
+              <Typography variant='h2' fontSize={24} letterSpacing={1}>
+                {formatToMonetaryValue(total)}
+              </Typography>
+            </PriceRow>
+            <BookingButton
+              fullWidth
+              disableElevation
+              variant='contained'
+              data-testid='bike-booking-button'
+              onClick={() => setBookedBike(!bookedBike)}
+            >
+              Add to booking
+            </BookingButton>
+          </OverviewContainer>
+        )}
       </Content>
     </div>
   )

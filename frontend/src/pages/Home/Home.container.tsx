@@ -1,9 +1,9 @@
 import { BOILERPLATE_CANDIDATE_TOKEN } from 'config'
 import Bike from 'models/Bike'
 import { useEffect, useState } from 'react'
-import { getAllBikes } from 'services/bikes.service'
 
 import CustomSnackBar from 'components/CustomSnackBar/CustomSnackBar.component'
+import { getAllAvailableBikes } from 'services/bikes.service'
 import Home from './Home.component'
 
 const HomeContainer = () => {
@@ -16,7 +16,7 @@ const HomeContainer = () => {
 
   const handleGetAllBikes = async () => {
     try {
-      const bikes = await getAllBikes()
+      const bikes = await getAllAvailableBikes()
 
       setBikes(bikes)
     } catch (error) {

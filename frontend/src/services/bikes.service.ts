@@ -8,6 +8,11 @@ export const getAllBikes = async (): Promise<Bike[]> => {
   return response.data
 }
 
+export const getAllAvailableBikes = async (): Promise<Bike[]> => {
+  const response = await apiClient.get('/bikes/available')
+  return response.data
+}
+
 export const rentBike = async (data: RentBike): Promise<BikeRentHistory> => {
   const response = await apiClient.post('bikes/rent', data)
 

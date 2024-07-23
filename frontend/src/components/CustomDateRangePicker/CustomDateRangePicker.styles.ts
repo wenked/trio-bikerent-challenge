@@ -1,6 +1,9 @@
 import styled from '@emotion/styled'
 
 export const CustomDateRangePickerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 20px;
 
   .rdrDateRangeWrapper {

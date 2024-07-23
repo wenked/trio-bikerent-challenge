@@ -6,11 +6,13 @@ import BookingAddressMap from 'components/BookingAddressMap'
 import CustomDateRangePicker from 'components/CustomDateRangePicker/CustomDateRangePicker.component'
 import Header from 'components/Header'
 import Bike from 'models/Bike'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import BookedBike from 'components/BookedBike/BookedBike.component'
+import CustomSnackBar from 'components/CustomSnackBar/CustomSnackBar.component'
 import { differenceInDays } from 'date-fns'
 import { Range, RangeKeyDict } from 'react-date-range'
+import { rentBike } from 'services/bikes.service'
 import {
   BookingButton,
   BreadcrumbContainer,
@@ -31,6 +33,9 @@ interface BikeDetailsProps {
 }
 
 const BikeDetails = ({ bike }: BikeDetailsProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(false)
+
   const [bookedBike, setBookedBike] = useState(false)
   const [selectedRange, setSelectedRange] = useState<Range>({
     startDate: new Date(),
@@ -42,11 +47,14 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
   const [subtotal, setSubtotal] = useState(0)
   const [total, setTotal] = useState(0)
 
+  const handleCloseSnackBar = () => {
+    setError(false)
+  }
+
   const handleDateRangeChange = (ranges: RangeKeyDict) => {
-    setSelectedRange(ranges.selection)
     console.log({ range: ranges.selection })
     if (ranges.selection.startDate && ranges.selection.endDate && bike) {
-      const rentDays = differenceInDays(ranges.selection.endDate, ranges.selection.startDate) + 1
+      const rentDays = differenceInDays(ranges.selection.endDate, ranges.selection.startDate)
 
       const price = rentDays * bike.rate || 0
 
@@ -58,24 +66,46 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
       console.log({ price, fee, total })
       setTotal(total)
       console.log({ rentDays })
+
+      setSelectedRange(ranges.selection)
+    }
+  }
+
+  const handleBikeBooking = async () => {
+    try {
+      if (!bike) return
+
+      if (!selectedRange.startDate || !selectedRange.endDate) return
+
+      setIsLoading(true)
+
+      await rentBike({
+        bikeId: bike.id,
+        rentDate: selectedRange.startDate,
+        returnDate: selectedRange.endDate,
+      })
+
+      setIsLoading(false)
+      setBookedBike(true)
+    } catch (error) {
+      console.error(error)
+      setError(true)
+      setIsLoading(false)
     }
   }
 
   const rateByDay = formatToMonetaryValue(bike?.rate || 0)
   const rateByWeek = formatToMonetaryValue((bike?.rate || 0) * 7)
 
-  useEffect(() => {
-    if (bike) {
-      const currentFee = getServicesFee(bike.rate || 0)
-      setServicesFee(currentFee)
-      setSubtotal(bike.rate || 0)
-      setTotal(bike.rate || 0 + currentFee)
-    }
-  }, [bike])
-
   return (
     <div data-testid='bike-details-page'>
       <Header />
+      <CustomSnackBar
+        open={error}
+        onClose={handleCloseSnackBar}
+        message='An error occurred while trying to booking the bike'
+        severity='error'
+      />
 
       <BreadcrumbContainer data-testid='bike-details-breadcrumbs'>
         <Breadcrumbs separator={<BreadcrumbSeparator />}>
@@ -190,7 +220,8 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
               disableElevation
               variant='contained'
               data-testid='bike-booking-button'
-              onClick={() => setBookedBike(!bookedBike)}
+              onClick={() => handleBikeBooking()}
+              disabled={isLoading}
             >
               Add to booking
             </BookingButton>

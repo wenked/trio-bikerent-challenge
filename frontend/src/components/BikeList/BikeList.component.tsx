@@ -1,8 +1,10 @@
-import Bike from 'models/Bike'
-import { getQuantityLabel } from './BikeList.utils'
-import BikeCard from 'components/BikeCard'
-import { Container, ListContainer, QuantityContainer } from './BikeList.styles'
 import { Typography } from '@mui/material'
+import BikeCard from 'components/BikeCard'
+import { BikeDetailsMobileModal } from 'components/BikeDetailsMobileModal/BikeDetailsMobileModal.component'
+import Bike from 'models/Bike'
+import { useState } from 'react'
+import { Container, ListContainer, QuantityContainer } from './BikeList.styles'
+import { getQuantityLabel } from './BikeList.utils'
 
 interface BikeListProps {
   bikes: Bike[]
@@ -10,6 +12,29 @@ interface BikeListProps {
 
 const BikeList = ({ bikes }: BikeListProps) => {
   const quantityLabel = getQuantityLabel(bikes.length)
+  const [openMobileModal, setOpenMobileModal] = useState(false)
+  const [selectedBike, setSelectedBike] = useState<Bike | null>(null)
+
+  const handleOpenBikeDetails = (bike: Bike) => {
+    setSelectedBike(bike)
+    setOpenMobileModal(true)
+  }
+
+  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    console.log({ open })
+
+    if (
+      event &&
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' ||
+        (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return
+    }
+    console.log({ open })
+    setSelectedBike(open ? selectedBike : null)
+    setOpenMobileModal(open)
+  }
 
   return (
     <Container data-testid='bikes-list'>
@@ -21,9 +46,21 @@ const BikeList = ({ bikes }: BikeListProps) => {
 
       <ListContainer>
         {bikes.map((bike) => (
-          <BikeCard key={bike.id} bike={bike} />
+          <BikeCard
+            key={bike.id}
+            bike={bike}
+            handleOpenMobileBikeDetails={() => handleOpenBikeDetails(bike)}
+          />
         ))}
       </ListContainer>
+
+      {openMobileModal && selectedBike ? (
+        <BikeDetailsMobileModal
+          open={openMobileModal}
+          toggleDrawer={toggleDrawer}
+          bike={selectedBike}
+        />
+      ) : null}
     </Container>
   )
 }

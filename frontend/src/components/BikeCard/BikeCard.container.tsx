@@ -1,3 +1,5 @@
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import Bike from 'models/Bike'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -6,14 +8,21 @@ import BikeCard from './BikeCard.component'
 
 interface BikeCardProps {
   bike: Bike
+  handleOpenMobileBikeDetails: () => void
 }
 
-const BikeCardContainer = ({ bike }: BikeCardProps) => {
+const BikeCardContainer = ({ bike, handleOpenMobileBikeDetails }: BikeCardProps) => {
   const navigate = useNavigate()
-
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   const handleOpenBikeDetails = () => {
+    if (isMobile) {
+      handleOpenMobileBikeDetails()
+      return
+    }
+
     navigate(Paths.BIKE_DETAILS, { state: { bike } })
   }
 

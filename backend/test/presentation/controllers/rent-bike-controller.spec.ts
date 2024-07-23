@@ -77,7 +77,7 @@ describe('Rent bike controller', () => {
     expect(response.statusCode).toEqual(401);
   });
 
-  it('should return 409 if bike is already rented', async () => {
+  it('should return 409 if bike is already rented in this period', async () => {
     const candidateRepository = new InMemoryCandidateRepository();
     const bikeRepository = new InMemoryBikeRepository();
     const bikeRentHistoryRepository = new InMemoryBikeRentHistoryRepository();
@@ -97,8 +97,8 @@ describe('Rent bike controller', () => {
       bikeId: bike.id,
       candidateId: candidate.id,
       status: 'RENTED',
-      rentDate: new Date(),
-      returnDate: new Date(),
+      rentDate: new Date('2024-07-22 00:00:00'),
+      returnDate: new Date('2024-07-24 00:00:00'),
       cost: 10,
     });
 

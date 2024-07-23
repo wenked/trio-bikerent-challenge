@@ -60,6 +60,37 @@ export class PrismaBikeRentHistoryRepository implements BikeRentHistoryRepositor
     });
   }
 
+  async findRentedByBikeIdAndPeriod(
+    bikeId: number,
+    rentDate: Date,
+    returnDate: Date
+  ): Promise<BikeRentHistory[] | undefined> {
+    return await prismaClient.bikeRentHistory.findMany({
+      where: {
+        bikeId,
+        status: 'RENTED',
+        OR: [
+          {
+            rentDate: {
+              lte: rentDate,
+            },
+            returnDate: {
+              gte: rentDate,
+            },
+          },
+          {
+            rentDate: {
+              lte: returnDate,
+            },
+            returnDate: {
+              gte: returnDate,
+            },
+          },
+        ],
+      },
+    });
+  }
+
   async findRentedByBikeId(bikeId: number): Promise<BikeRentHistory | undefined> {
     return await prismaClient.bikeRentHistory.findFirst({
       where: {

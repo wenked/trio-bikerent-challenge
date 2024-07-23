@@ -29,23 +29,29 @@ export class RentBike {
 
     if (!bike) throw new BikeNotExistsError(bikeRentHistory.bikeId);
 
-    const existingBikeRentHistory = await this.bikeRentHistoryRepository.findRentedByBikeId(
-      bikeRentHistory.bikeId
-    );
-    console.log({ existingBikeRentHistory });
+    const existingBikeRentHistory =
+      await this.bikeRentHistoryRepository.findRentedByBikeIdAndPeriod(
+        bikeRentHistory.bikeId,
+        new Date(bikeRentHistory.rentDate),
+        new Date(bikeRentHistory.returnDate)
+      );
 
-    if (existingBikeRentHistory) throw new BikeNotAvailableError(bikeRentHistory.bikeId);
+    if (existingBikeRentHistory.length > 0) throw new BikeNotAvailableError(bikeRentHistory.bikeId);
 
     const returnDate = new Date(bikeRentHistory.returnDate);
     const rentDate = new Date(bikeRentHistory.rentDate);
+    console.log({ returnDate, rentDate });
     const rentPeriod = returnDate.getTime() - rentDate.getTime();
 
+    console.log({ rentPeriod });
     const rentPeriodInDays = Math.ceil(rentPeriod / (1000 * 3600 * 24));
     console.log({ rentPeriodInDays });
+    const isLessThan24Hours = rentPeriod < 24 * 60 * 60 * 1000;
 
-    if (rentPeriodInDays < 1) throw new InvalidRentBikePeriodError();
+    if (isLessThan24Hours) throw new InvalidRentBikePeriodError();
 
     const rentCost = rentPeriodInDays * bike.rate;
+
     const rentFee = rentCost * 0.15;
     bikeRentHistory.cost = Math.ceil((rentCost + rentFee) * 100); // in cents
 

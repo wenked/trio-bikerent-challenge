@@ -5,6 +5,11 @@ export interface BikeRentHistoryRepository {
   listRentedBikeHistories(candidateId: number): Promise<BikeRentHistory[]>;
   findById(id: number): Promise<BikeRentHistory | undefined>;
   findRentedByBikeId(bikeId: number): Promise<BikeRentHistory | undefined>;
+  findRentedByBikeIdAndPeriod(
+    bikeId: number,
+    rentDate: Date,
+    returnDate: Date
+  ): Promise<BikeRentHistory[] | undefined>;
   add(bikeRentHistory: BikeRentHistory): Promise<BikeRentHistory>;
   update(bikeRentHistory: BikeRentHistory): Promise<BikeRentHistory>;
 }

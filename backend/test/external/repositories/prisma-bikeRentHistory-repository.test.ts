@@ -260,3 +260,51 @@ describe('BikeRentHistory prisma repository', () => {
     await clearPrismaDatabase();
   });
 });
+it('should be able to find rented bikeRentHistories by bikeId and period', async () => {
+  await clearPrismaDatabase();
+
+  const candidateRepo = new PrismaCandidateRepository();
+  const bikeRepo = new PrismaBikeRepository();
+  const bikeRentHistoryRepo = new PrismaBikeRentHistoryRepository();
+
+  const candidate = await candidateRepo.add({
+    name: 'any_name',
+    email: 'any_email',
+    token: 'any_token',
+  });
+
+  const bikeInfo = new BikeBuilder().build();
+
+  const bike = await bikeRepo.add({
+    candidateId: candidate.id,
+    ...bikeInfo,
+  });
+
+  const rentDate = new Date();
+  const returnDate = new Date();
+  await bikeRentHistoryRepo.add({
+    bikeId: bike.id,
+    candidateId: candidate.id,
+    status: 'RENTED',
+    rentDate,
+    returnDate,
+    cost: 10,
+  });
+
+  const rentedBikeRentHistories = await bikeRentHistoryRepo.findRentedByBikeIdAndPeriod(
+    bike.id,
+    rentDate,
+    returnDate
+  );
+
+  expect(rentedBikeRentHistories).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        bikeId: bike.id,
+        candidateId: candidate.id,
+        status: 'RENTED',
+        cost: 10,
+      }),
+    ])
+  );
+});

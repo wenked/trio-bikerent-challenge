@@ -27,6 +27,21 @@ export class InMemoryBikeRentHistoryRepository implements BikeRentHistoryReposit
     );
   }
 
+  async findRentedByBikeIdAndPeriod(
+    bikeId: number,
+    rentDate: Date,
+    returnDate: Date
+  ): Promise<BikeRentHistory[] | undefined> {
+    return this.bikeRentHistories.filter((history) => {
+      return (
+        history.bikeId === bikeId &&
+        history.status === 'RENTED' &&
+        ((history.rentDate <= rentDate && history.returnDate >= rentDate) ||
+          (history.rentDate <= returnDate && history.returnDate >= returnDate))
+      );
+    });
+  }
+
   async add(bikeRentHistory: BikeRentHistory): Promise<BikeRentHistory> {
     const newBikeRentHistory = {
       ...bikeRentHistory,

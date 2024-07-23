@@ -3,9 +3,13 @@ import BikeImageSelector from 'components/BikeImageSelector'
 import BikeSpecs from 'components/BikeSpecs'
 import BikeType from 'components/BikeType'
 import BookingAddressMap from 'components/BookingAddressMap'
+import CustomDateRangePicker from 'components/CustomDateRangePicker/CustomDateRangePicker.component'
 import Header from 'components/Header'
 import Bike from 'models/Bike'
-import { getServicesFee } from './BikeDetails.utils'
+import { useState } from 'react'
+
+import { differenceInDays } from 'date-fns'
+import { Range, RangeKeyDict } from 'react-date-range'
 import {
   BookingButton,
   BreadcrumbContainer,
@@ -19,17 +23,48 @@ import {
   OverviewContainer,
   PriceRow,
 } from './BikeDetails.styles'
+import { getServicesFee } from './BikeDetails.utils'
 
 interface BikeDetailsProps {
   bike?: Bike
 }
 
 const BikeDetails = ({ bike }: BikeDetailsProps) => {
+  const [openBookingSettings, setOpenBookingSettings] = useState(false)
+  const [selectedRange, setSelectedRange] = useState<Range>({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: 'selection',
+  })
+
+  const [servicesFee, setServicesFee] = useState('0')
+  const [subtotal, setSubtotal] = useState('0')
+  const [total, setTotal] = useState('0')
+
+  const handleDateRangeChange = (ranges: RangeKeyDict) => {
+    setSelectedRange(ranges.selection)
+    console.log({ range: ranges.selection })
+    if (ranges.selection.startDate && ranges.selection.endDate && bike) {
+      const rentDays = differenceInDays(ranges.selection.endDate, ranges.selection.startDate) + 1
+
+      const price = rentDays * bike.rate || 0
+
+      setSubtotal(price.toFixed(2))
+      const fee = getServicesFee(price)
+      setServicesFee(fee.toFixed(2))
+
+      const total = price + fee
+      console.log({ price, fee, total })
+      setTotal(total.toFixed(2))
+      console.log({ rentDays })
+    }
+  }
+
   const rateByDay = bike?.rate || 0
   const rateByWeek = rateByDay * 7
 
-  const servicesFee = getServicesFee(rateByDay)
-  const total = rateByDay + servicesFee
+  // const servicesFee = getServicesFee(rateByDay)
+  // const total = rateByDay + servicesFee
 
   return (
     <div data-testid='bike-details-page'>
@@ -111,6 +146,7 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
         </DetailsContainer>
 
         <OverviewContainer variant='outlined' data-testid='bike-overview-container'>
+          <CustomDateRangePicker selectedRange={selectedRange} onChange={handleDateRangeChange} />
           <Typography variant='h2' fontSize={16} marginBottom={1.25}>
             Booking Overview
           </Typography>
@@ -123,7 +159,7 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
               <InfoIcon fontSize='small' />
             </Box>
 
-            <Typography>{rateByDay} €</Typography>
+            <Typography>{subtotal} €</Typography>
           </PriceRow>
 
           <PriceRow marginTop={1.5} data-testid='bike-overview-single-price'>
@@ -149,6 +185,7 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
             disableElevation
             variant='contained'
             data-testid='bike-booking-button'
+            onClick={() => setOpenBookingSettings(!openBookingSettings)}
           >
             Add to booking
           </BookingButton>

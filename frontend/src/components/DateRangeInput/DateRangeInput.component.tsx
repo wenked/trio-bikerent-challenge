@@ -14,8 +14,8 @@ const DateRangeInput = ({
   handleToggleCalendar,
 }: DateRangeInputProps) => {
   return (
-    <DateInputContainer>
-      <div onClick={handleToggleCalendar}>
+    <DateInputContainer data-testid='date-range-input'>
+      <div onClick={handleToggleCalendar} data-testid='data-range-input-button'>
         <Typography fontWeight={800} fontSize={24}>
           Select date and time
         </Typography>

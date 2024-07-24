@@ -29,7 +29,7 @@ const BikeList = ({ bikes }: BikeListProps) => {
     ) {
       return
     }
-    console.log({ open })
+
     setSelectedBike(open ? selectedBike : null)
     setOpenMobileModal(open)
   }

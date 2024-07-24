@@ -3,7 +3,7 @@ import Bike from 'models/Bike'
 import { useEffect, useState } from 'react'
 
 import CustomSnackBar from 'components/CustomSnackBar/CustomSnackBar.component'
-import { getAllAvailableBikes } from 'services/bikes.service'
+import { getAllBikes } from 'services/bikes.service'
 import Home from './Home.component'
 
 const HomeContainer = () => {
@@ -16,7 +16,7 @@ const HomeContainer = () => {
 
   const handleGetAllBikes = async () => {
     try {
-      const bikes = await getAllAvailableBikes()
+      const bikes = await getAllBikes()
 
       setBikes(bikes)
     } catch (error) {

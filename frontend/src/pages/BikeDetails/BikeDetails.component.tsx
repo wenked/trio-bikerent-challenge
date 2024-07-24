@@ -58,7 +58,6 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
   }
 
   const handleDateRangeChange = (ranges: RangeKeyDict) => {
-    console.log({ range: ranges.selection })
     if (ranges.selection.startDate && ranges.selection.endDate && bike) {
       const rentDays = differenceInDays(ranges.selection.endDate, ranges.selection.startDate)
 
@@ -69,9 +68,8 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
       setServicesFee(fee)
 
       const total = price + fee
-      console.log({ price, fee, total })
+
       setTotal(total)
-      console.log({ rentDays })
 
       setSelectedRange(ranges.selection)
     }

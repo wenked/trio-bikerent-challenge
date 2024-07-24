@@ -44,11 +44,14 @@ export const CustomDateRangePickerContainer = styled.div`
     font-weight: 700;
   }
 
-  .rdrDayDisabled .rdrDayNumber span {
-    color: red;
+  .rdrDayPassive .rdrDayNumber span {
+    opacity: 0.4;
+  }
+  .rdrDayDisabled {
+    background-color: transparent;
   }
 
-  .rdrDayPassive .rdrDayNumber span {
+  .rdrDayDisabled .rdrDayNumber span {
     opacity: 0.4;
   }
 

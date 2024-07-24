@@ -11,11 +11,16 @@ import BookedBike from 'components/BookedBike/BookedBike.component'
 import BookedBikeModal from 'components/BookedBikeModal/BookedBikeModal.component'
 import BookingOverview from 'components/BookingOverview/BookingOverview.component'
 import CustomSnackBar from 'components/CustomSnackBar/CustomSnackBar.component'
+import { MobileBookingHeader } from 'components/Header/layouts'
 import { differenceInDays } from 'date-fns'
 import { Range, RangeKeyDict } from 'react-date-range'
+import { useNavigate } from 'react-router-dom'
 import { rentBike } from 'services/bikes.service'
 import theme from 'styles/theme'
 import {
+  BackButton,
+  BackIcon,
+  BookingContainer,
   BreadcrumbContainer,
   BreadcrumbHome,
   BreadcrumbSeparator,
@@ -32,7 +37,8 @@ interface BikeDetailsProps {
 }
 
 const BikeDetails = ({ bike }: BikeDetailsProps) => {
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const navigate = useNavigate()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(false)
 
@@ -94,12 +100,17 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
     }
   }
 
+  const handleGoBackHome = () => {
+    navigate('/')
+  }
+
   const rateByDay = formatToMonetaryValue(bike?.rate || 0)
   const rateByWeek = formatToMonetaryValue((bike?.rate || 0) * 7)
 
   return (
     <div data-testid='bike-details-page'>
-      <Header />
+      {isMobile ? <MobileBookingHeader /> : <Header />}
+
       <CustomSnackBar
         open={error}
         onClose={handleCloseSnackBar}
@@ -107,17 +118,30 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
         severity='error'
       />
 
-      <BreadcrumbContainer data-testid='bike-details-breadcrumbs'>
-        <Breadcrumbs separator={<BreadcrumbSeparator />}>
-          <Link underline='hover' display='flex' alignItems='center' color='white' href='/'>
-            <BreadcrumbHome />
-          </Link>
+      {isMobile ? (
+        <BookingContainer>
+          <Box gap={5} display='flex' flexDirection='row' alignItems='center' width='100%'>
+            <BackButton onClick={handleGoBackHome}>
+              <BackIcon />
+            </BackButton>
+            <Typography fontWeight={800} fontSize={34} letterSpacing={1} color='black'>
+              Booking
+            </Typography>
+          </Box>
+        </BookingContainer>
+      ) : (
+        <BreadcrumbContainer data-testid='bike-details-breadcrumbs'>
+          <Breadcrumbs separator={<BreadcrumbSeparator />}>
+            <Link underline='hover' display='flex' alignItems='center' color='white' href='/'>
+              <BreadcrumbHome />
+            </Link>
 
-          <Typography fontWeight={800} letterSpacing={1} color='white'>
-            {bike?.name}
-          </Typography>
-        </Breadcrumbs>
-      </BreadcrumbContainer>
+            <Typography fontWeight={800} letterSpacing={1} color='white'>
+              {bike?.name}
+            </Typography>
+          </Breadcrumbs>
+        </BreadcrumbContainer>
+      )}
 
       <Content>
         {isMobile ? null : (

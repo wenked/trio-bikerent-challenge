@@ -1,3 +1,4 @@
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightOutlined from '@mui/icons-material/ChevronRightOutlined'
 import FavoriteBorderOutlined from '@mui/icons-material/FavoriteBorderOutlined'
 import HomeOutlined from '@mui/icons-material/HomeOutlined'
@@ -16,11 +17,16 @@ import {
 
 export const BreadcrumbContainer = styled(Box)<BoxProps>(({ theme }) => ({
   position: 'relative',
-  margin: '32px 0 32px 100px',
+  margin: '16px',
 
   [theme.breakpoints.down('lg')]: {
     margin: '90px 0 32px 8vw',
   },
+}))
+
+export const BookingContainer = styled(Box)<BoxProps>(({ theme }) => ({
+  position: 'relative',
+  margin: '32px 0 32px 100px',
 }))
 
 export const BreadcrumbHome = styled(HomeOutlined)(({ theme }) => ({
@@ -96,4 +102,15 @@ export const PriceRow = styled(Box)<BoxProps>(() => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
+}))
+
+export const BackButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
+  border: `1px solid ${theme.palette.grey[500]}`,
+  borderRadius: 20,
+  width: 60,
+  height: 60,
+}))
+
+export const BackIcon = styled(ChevronLeftIcon)(({ theme }) => ({
+  color: theme.palette.common.black,
 }))

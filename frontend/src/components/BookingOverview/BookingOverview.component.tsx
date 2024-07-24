@@ -57,7 +57,7 @@ const BookingOverview = ({
 
   return (
     <OverviewContainer variant='outlined' data-testid='bike-overview-container'>
-      {bike ? <BikeCard small={true} bike={bike} /> : null}
+      {bike && isMobile ? <BikeCard small={true} bike={bike} /> : null}
       {isMobile ? (
         <DateRangeInput
           selectedEndDate={selectedRange?.endDate}

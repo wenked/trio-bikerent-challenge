@@ -29,4 +29,5 @@ export const BookedBikeDetail = styled(Box)(() => ({
   flexDirection: 'column',
   alignItems: 'center',
   width: '185px',
+  gap: 16,
 }))

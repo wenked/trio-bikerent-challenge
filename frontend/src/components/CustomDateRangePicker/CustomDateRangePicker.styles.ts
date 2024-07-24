@@ -6,6 +6,11 @@ export const CustomDateRangePickerContainer = styled.div`
   justify-content: center;
   margin-bottom: 20px;
 
+  @media (max-width: 768px) {
+    height: 45vh;
+    margin-bottom: 0px;
+  }
+
   .rdrDateRangeWrapper {
     background-color: #1f49d1;
     border-radius: 20px;

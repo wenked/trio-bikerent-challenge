@@ -8,17 +8,18 @@ import BikeCard from './BikeCard.component'
 
 interface BikeCardProps {
   bike: Bike
-  handleOpenMobileBikeDetails: () => void
+  handleOpenMobileBikeDetails?: () => void
+  small: boolean
 }
 
-const BikeCardContainer = ({ bike, handleOpenMobileBikeDetails }: BikeCardProps) => {
+const BikeCardContainer = ({ bike, handleOpenMobileBikeDetails, small }: BikeCardProps) => {
   const navigate = useNavigate()
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   const handleOpenBikeDetails = () => {
-    if (isMobile) {
+    if (isMobile && handleOpenMobileBikeDetails) {
       handleOpenMobileBikeDetails()
       return
     }
@@ -43,6 +44,7 @@ const BikeCardContainer = ({ bike, handleOpenMobileBikeDetails }: BikeCardProps)
       imageUrls={bike.imageUrls}
       cardImage={bike.imageUrls[0] || ''}
       rate={bike.rate}
+      small={small}
     />
   )
 }

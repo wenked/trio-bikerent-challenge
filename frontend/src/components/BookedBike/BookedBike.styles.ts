@@ -17,6 +17,11 @@ export const BookedBikeContainer = styled(Card)<CardProps>(({ theme }) => ({
   borderColor: theme.palette.grey[500],
   padding: 34,
   maxHeight: 400,
+
+  [theme.breakpoints.down('md')]: {
+    width: '85vw',
+    maxHeight: '65vh',
+  },
 }))
 
 export const BookedBikeDetail = styled(Box)(() => ({

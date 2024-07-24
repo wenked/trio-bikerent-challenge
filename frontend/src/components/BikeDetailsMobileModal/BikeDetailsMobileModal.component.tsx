@@ -7,6 +7,8 @@ import Bike from 'models/Bike'
 import { PriceRow } from 'pages/BikeDetails/BikeDetails.styles'
 import { formatToMonetaryValue } from 'pages/BikeDetails/BikeDetails.utils'
 import Carousel from 'react-material-ui-carousel'
+import { useNavigate } from 'react-router-dom'
+import { Paths } from 'routes/paths'
 import { FavoriteIcon, LikeButton, RentBikeButton } from './BikeDetailsMobileModal.styles'
 
 interface BikeDetailsMobileModalProps {
@@ -20,7 +22,11 @@ export const BikeDetailsMobileModal = ({
   open,
   toggleDrawer,
 }: BikeDetailsMobileModalProps) => {
-  console.log({ open })
+  const navigate = useNavigate()
+
+  const handleOpenBookingDetails = () => {
+    navigate(Paths.BIKE_DETAILS, { state: { bike } })
+  }
 
   const rateByDay = formatToMonetaryValue(bike?.rate || 0)
   const rateByWeek = formatToMonetaryValue((bike?.rate || 0) * 7)
@@ -140,7 +146,7 @@ export const BikeDetailsMobileModal = ({
                   disableElevation
                   variant='contained'
                   data-testid='mobile-bike-booking-button'
-                  // onClick={() => handleBikeBooking()}
+                  onClick={() => handleOpenBookingDetails()}
                   // disabled={isLoading}
                 >
                   Rent Bike

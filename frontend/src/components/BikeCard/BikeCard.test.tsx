@@ -4,14 +4,7 @@ import BikeCard from '.'
 
 describe('BikeCard component', () => {
   beforeEach(() => {
-    render(
-      <BikeCard
-        bike={mockedBike}
-        handleOpenMobileBikeDetails={() => {
-          // Do nothing
-        }}
-      />,
-    )
+    render(<BikeCard bike={mockedBike} small={false} />)
   })
 
   it('should has an image', () => {

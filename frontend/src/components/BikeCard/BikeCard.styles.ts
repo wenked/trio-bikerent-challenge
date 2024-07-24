@@ -1,15 +1,15 @@
+import { FavoriteBorderOutlined } from '@mui/icons-material'
 import {
   Box,
+  BoxProps,
   Card,
   CardHeader,
   CardHeaderProps,
   CardProps,
   styled,
   Typography,
-  BoxProps,
   TypographyProps,
 } from '@mui/material'
-import { FavoriteBorderOutlined } from '@mui/icons-material'
 
 interface BikeImageProps extends BoxProps {
   isLoaded: boolean
@@ -31,6 +31,19 @@ export const Container = styled(Card)<CardProps>(({ theme }) => ({
         20px 20px 80px rgba(0, 0, 0, 0.07)
     `,
   },
+
+  [theme.breakpoints.down('md')]: {
+    width: '100%',
+  },
+}))
+
+export const MobileContainer = styled(Card)<CardProps>(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  gap: 1,
+  borderColor: theme.palette.grey[500],
+  padding: 10,
+  width: 100,
 
   [theme.breakpoints.down('md')]: {
     width: '100%',

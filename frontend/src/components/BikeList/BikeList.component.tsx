@@ -21,8 +21,6 @@ const BikeList = ({ bikes }: BikeListProps) => {
   }
 
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    console.log({ open })
-
     if (
       event &&
       event.type === 'keydown' &&
@@ -49,6 +47,7 @@ const BikeList = ({ bikes }: BikeListProps) => {
           <BikeCard
             key={bike.id}
             bike={bike}
+            small={false}
             handleOpenMobileBikeDetails={() => handleOpenBikeDetails(bike)}
           />
         ))}

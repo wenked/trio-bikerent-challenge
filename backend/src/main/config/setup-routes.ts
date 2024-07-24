@@ -5,6 +5,7 @@ import { makeListAvailableBikesController } from '@/main/factories/make-list-ava
 import { makeListBikesController } from '@/main/factories/make-list-bikes-controller';
 import { makeListUsersController } from '@/main/factories/make-list-users-controller';
 import { Express, Router } from 'express';
+import { makeListRentedBikeRentHitoriesByIdController } from '../factories/make-list-rented-bikeRentHistories-controller';
 import { makeRentBikeController } from '../factories/make-rent-bike-controller';
 import { makeReturnBikeController } from '../factories/make-return-bike-controller';
 
@@ -18,6 +19,7 @@ export function setupRoutes(app: Express): void {
   createCreateCandidateRoute(router);
   rentBikeRoute(router);
   returnBikeRoute(router);
+  listRentedBikeHistoriesByBikeIdRoute(router);
 }
 
 function createListBikesRoute(router: Router) {
@@ -30,6 +32,10 @@ function createListAvailableBikesRoute(router: Router) {
 
 function rentBikeRoute(router: Router) {
   router.post('/bikes/rent', adaptRoute(makeRentBikeController()));
+}
+
+function listRentedBikeHistoriesByBikeIdRoute(router: Router) {
+  router.get('/bikes/rented/:id', adaptRoute(makeListRentedBikeRentHitoriesByIdController()));
 }
 
 function returnBikeRoute(router: Router) {

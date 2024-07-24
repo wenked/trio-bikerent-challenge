@@ -21,8 +21,8 @@ export class InMemoryBikeRentHistoryRepository implements BikeRentHistoryReposit
     return this.bikeRentHistories.find((bikeRentHistory) => bikeRentHistory.id === id);
   }
 
-  async findRentedByBikeId(bikeId: number): Promise<BikeRentHistory | undefined> {
-    return this.bikeRentHistories.find(
+  async listRentedBikeHistoriesByBikeId(bikeId: number): Promise<BikeRentHistory[]> {
+    return this.bikeRentHistories.filter(
       (bikeRentHistory) => bikeRentHistory.bikeId === bikeId && bikeRentHistory.status === 'RENTED'
     );
   }

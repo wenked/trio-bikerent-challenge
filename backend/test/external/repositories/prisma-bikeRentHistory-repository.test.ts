@@ -163,15 +163,17 @@ describe('BikeRentHistory prisma repository', () => {
       cost: 10,
     });
 
-    const bikeRentHistory = await bikeRentHistoryRepo.findRentedByBikeId(bike.id);
+    const bikeRentHistory = await bikeRentHistoryRepo.listRentedBikeHistoriesByBikeId(bike.id);
 
     expect(bikeRentHistory).toEqual(
-      expect.objectContaining({
-        bikeId: bike.id,
-        candidateId: candidate.id,
-        status: 'RENTED',
-        cost: 10,
-      })
+      expect.arrayContaining([
+        expect.objectContaining({
+          bikeId: bike.id,
+          candidateId: candidate.id,
+          status: 'RENTED',
+          cost: 10,
+        }),
+      ])
     );
   });
 

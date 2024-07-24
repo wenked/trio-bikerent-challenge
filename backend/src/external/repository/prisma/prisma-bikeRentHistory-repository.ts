@@ -91,8 +91,8 @@ export class PrismaBikeRentHistoryRepository implements BikeRentHistoryRepositor
     });
   }
 
-  async findRentedByBikeId(bikeId: number): Promise<BikeRentHistory | undefined> {
-    return await prismaClient.bikeRentHistory.findFirst({
+  async listRentedBikeHistoriesByBikeId(bikeId: number): Promise<BikeRentHistory[]> {
+    return await prismaClient.bikeRentHistory.findMany({
       where: {
         bikeId,
         status: 'RENTED',

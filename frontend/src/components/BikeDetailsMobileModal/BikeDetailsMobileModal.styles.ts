@@ -15,7 +15,7 @@ export const FavoriteIcon = styled(FavoriteBorderOutlined)(({ theme }) => ({
   color: theme.palette.common.white,
 }))
 
-export const LikeButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
+export const LikeButton = styled(IconButton)<IconButtonProps>(() => ({
   border: '1px solid #e3dada4a',
   borderRadius: 20,
   width: 60,

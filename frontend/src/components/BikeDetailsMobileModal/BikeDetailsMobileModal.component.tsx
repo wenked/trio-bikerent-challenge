@@ -17,11 +17,7 @@ interface BikeDetailsMobileModalProps {
   toggleDrawer: (open: boolean) => React.ReactEventHandler
 }
 
-export const BikeDetailsMobileModal = ({
-  bike,
-  open,
-  toggleDrawer,
-}: BikeDetailsMobileModalProps) => {
+const BikeDetailsMobileModal = ({ bike, open, toggleDrawer }: BikeDetailsMobileModalProps) => {
   const navigate = useNavigate()
 
   const handleOpenBookingDetails = () => {
@@ -159,3 +155,5 @@ export const BikeDetailsMobileModal = ({
     </>
   )
 }
+
+export default BikeDetailsMobileModal

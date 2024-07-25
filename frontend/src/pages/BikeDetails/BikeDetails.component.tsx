@@ -41,8 +41,8 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(false)
-
   const [bookedBike, setBookedBike] = useState(false)
+
   const [selectedRange, setSelectedRange] = useState<Range>({
     startDate: new Date(),
     endDate: new Date(),

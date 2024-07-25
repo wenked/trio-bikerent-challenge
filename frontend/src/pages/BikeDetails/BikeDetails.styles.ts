@@ -24,7 +24,7 @@ export const BreadcrumbContainer = styled(Box)<BoxProps>(({ theme }) => ({
   },
 }))
 
-export const BookingContainer = styled(Box)<BoxProps>(({ theme }) => ({
+export const BookingContainer = styled(Box)<BoxProps>(() => ({
   position: 'relative',
   margin: '16px',
 }))

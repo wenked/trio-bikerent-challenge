@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material'
 import BikeCard from 'components/BikeCard'
-import { BikeDetailsMobileModal } from 'components/BikeDetailsMobileModal/BikeDetailsMobileModal.component'
+import BikeDetailsMobileModal from 'components/BikeDetailsMobileModal/BikeDetailsMobileModal.component'
 import Bike from 'models/Bike'
 import { useState } from 'react'
 import { Container, ListContainer, QuantityContainer } from './BikeList.styles'

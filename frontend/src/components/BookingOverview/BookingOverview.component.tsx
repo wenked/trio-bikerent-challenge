@@ -1,8 +1,16 @@
-import { Box, Divider, SwipeableDrawer, Typography, useMediaQuery } from '@mui/material'
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  SwipeableDrawer,
+  Typography,
+  useMediaQuery,
+} from '@mui/material'
 import BikeCard from 'components/BikeCard'
 import CustomDateRangePicker from 'components/CustomDateRangePicker/CustomDateRangePicker.component'
 import DateRangeInput from 'components/DateRangeInput/DateRangeInput.component'
 import Bike from 'models/Bike'
+import BikeRentHistory from 'models/BikeRentHistory'
 import {
   BookingButton,
   InfoIcon,
@@ -10,8 +18,9 @@ import {
   PriceRow,
 } from 'pages/BikeDetails/BikeDetails.styles'
 import { formatToMonetaryValue } from 'pages/BikeDetails/BikeDetails.utils'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Range, RangeKeyDict } from 'react-date-range'
+import { getAllRentedBikeHistoriesById } from 'services/bikes.service'
 import theme from 'styles/theme'
 import { SelectDateButton } from './BookingOverview.styles'
 
@@ -37,6 +46,9 @@ const BookingOverview = ({
   isLoading,
 }: BookingOverviewProps) => {
   const [openCalenar, setOpenCalendar] = useState(false)
+  const [rentedIsLoading, setRentedIsLoading] = useState(false)
+  const [rentedBikeHistories, setRentedBikeHistories] = useState<BikeRentHistory[]>([])
+
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const handleToggleCalendar = () => {
     setOpenCalendar(!openCalenar)
@@ -55,8 +67,26 @@ const BookingOverview = ({
     setOpenCalendar(open)
   }
 
+  const handleGetRentedBikeHistories = async () => {
+    try {
+      if (!bike) return
+
+      setRentedIsLoading(true)
+      const histories = await getAllRentedBikeHistoriesById(bike.id)
+      setRentedBikeHistories(histories)
+      setRentedIsLoading(false)
+    } catch (error) {
+      console.error(error)
+      setRentedIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    handleGetRentedBikeHistories()
+  }, [bike])
+
   return (
-    <OverviewContainer variant='outlined' data-testid='bike-overview-container'>
+    <OverviewContainer variant='outlined' data-testid='bike-overview-component'>
       {bike && isMobile ? <BikeCard small={true} bike={bike} /> : null}
       {isMobile ? (
         <DateRangeInput
@@ -66,8 +96,22 @@ const BookingOverview = ({
         />
       ) : null}
 
-      {isMobile ? null : (
-        <CustomDateRangePicker selectedRange={selectedRange} onChange={handleDateRangeChange} />
+      {isMobile ? null : !rentedIsLoading ? (
+        <CustomDateRangePicker
+          selectedRange={selectedRange}
+          onChange={handleDateRangeChange}
+          rentedBikeHistories={rentedBikeHistories}
+        />
+      ) : (
+        <Box
+          display='flex'
+          justifyContent='center'
+          alignItems='center'
+          marginBottom='50px'
+          height='340px'
+        >
+          <CircularProgress size={80} />
+        </Box>
       )}
 
       <Typography variant='h2' fontSize={16} marginBottom={1.25}>
@@ -104,34 +148,41 @@ const BookingOverview = ({
         variant='contained'
         data-testid='bike-booking-button'
         onClick={() => handleBikeBooking()}
-        disabled={isLoading}
+        disabled={isLoading || rentedIsLoading}
       >
         Add to booking
       </BookingButton>
-      <SwipeableDrawer
-        anchor='bottom'
-        open={openCalenar}
-        onClose={toggleDrawer(false)}
-        onOpen={toggleDrawer(true)}
-        PaperProps={{ sx: { borderRadius: '30px 30px 0 0', backgroundColor: '#1F49D1' } }}
-      >
-        <CustomDateRangePicker selectedRange={selectedRange} onChange={handleDateRangeChange} />
-        <div
-          style={{
-            padding: '0 20px 20px',
-          }}
+
+      {rentedIsLoading ? null : (
+        <SwipeableDrawer
+          anchor='bottom'
+          open={openCalenar}
+          onClose={toggleDrawer(false)}
+          onOpen={toggleDrawer(true)}
+          PaperProps={{ sx: { borderRadius: '30px 30px 0 0', backgroundColor: '#1F49D1' } }}
         >
-          <SelectDateButton
-            fullWidth
-            disableElevation
-            variant='contained'
-            data-testid='mobile-select-date-button'
-            onClick={toggleDrawer(false)}
+          <CustomDateRangePicker
+            rentedBikeHistories={rentedBikeHistories}
+            selectedRange={selectedRange}
+            onChange={handleDateRangeChange}
+          />
+          <div
+            style={{
+              padding: '0 20px 20px',
+            }}
           >
-            Select
-          </SelectDateButton>
-        </div>
-      </SwipeableDrawer>
+            <SelectDateButton
+              fullWidth
+              disableElevation
+              variant='contained'
+              data-testid='mobile-select-date-button'
+              onClick={toggleDrawer(false)}
+            >
+              Select
+            </SelectDateButton>
+          </div>
+        </SwipeableDrawer>
+      )}
     </OverviewContainer>
   )
 }

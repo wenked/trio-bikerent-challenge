@@ -15,6 +15,7 @@ const CustomSnackBar = ({ message, open, onClose, severity }: CustomSnackBarProp
       onClose={onClose}
       key={`${message}`}
       autoHideDuration={6000}
+      data-testid='custom-snackbar'
     >
       <Alert onClose={onClose} severity={severity} variant='filled' sx={{ width: '100%' }}>
         {message}

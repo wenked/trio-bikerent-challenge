@@ -13,7 +13,7 @@ describe('isDayDisabled', () => {
   })
 
   it('should return true if the date is within any rented bike history range', () => {
-    const date = new Date()
+    const date = new Date('2024-11-17 04:00:00')
     const rentedBikeHistories: BikeRentHistory[] = [
       {
         id: 1,
@@ -21,8 +21,8 @@ describe('isDayDisabled', () => {
         candidateId: 1,
         cost: 10,
         status: 'RENTED',
-        rentDate: new Date('2022-01-01'),
-        returnDate: new Date('2022-01-05'),
+        rentDate: new Date('2024-11-10 04:00:00'),
+        returnDate: new Date('2024-11-20 04:00:00'),
       },
       {
         id: 2,
@@ -30,8 +30,8 @@ describe('isDayDisabled', () => {
         candidateId: 1,
         cost: 10,
         status: 'RENTED',
-        rentDate: new Date('2022-01-10'),
-        returnDate: new Date('2022-01-15'),
+        rentDate: new Date('2024-12-12 04:00:00'),
+        returnDate: new Date('2024-12-14 04:00:00'),
       },
     ]
 
@@ -41,7 +41,7 @@ describe('isDayDisabled', () => {
   })
 
   it('should return false if the date is not before yesterday and not within any rented bike history range', () => {
-    const date = new Date()
+    const date = new Date('2024-12-17 04:00:00')
     const rentedBikeHistories: BikeRentHistory[] = [
       {
         id: 1,
@@ -49,8 +49,8 @@ describe('isDayDisabled', () => {
         candidateId: 1,
         cost: 10,
         status: 'RENTED',
-        rentDate: new Date('2022-01-01'),
-        returnDate: new Date('2022-01-05'),
+        rentDate: new Date('2024-12-01 04:00:00'),
+        returnDate: new Date('2024-12-03 04:00:00'),
       },
       {
         id: 2,
@@ -58,8 +58,8 @@ describe('isDayDisabled', () => {
         candidateId: 1,
         cost: 10,
         status: 'RENTED',
-        rentDate: new Date('2022-01-10'),
-        returnDate: new Date('2022-01-15'),
+        rentDate: new Date('2024-11-12 04:00:00'),
+        returnDate: new Date('2024-11-15 04:00:00'),
       },
     ]
 

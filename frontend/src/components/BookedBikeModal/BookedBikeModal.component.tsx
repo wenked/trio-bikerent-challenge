@@ -1,4 +1,4 @@
-import { Modal } from '@mui/material'
+import { Box, Modal } from '@mui/material'
 import BookedBike from 'components/BookedBike/BookedBike.component'
 import Bike from 'models/Bike'
 
@@ -11,8 +11,9 @@ interface BookedBikeModalProps {
 const BookedBikeModal = ({ open, bike, onClose }: BookedBikeModalProps) => {
   return (
     <Modal
+      data-testid='booked-bike-modal'
       open={open}
-      onClose={onClose}
+      onClose={() => onClose()}
       aria-labelledby='parent-modal-title'
       aria-describedby='parent-modal-description'
       sx={{
@@ -21,7 +22,9 @@ const BookedBikeModal = ({ open, bike, onClose }: BookedBikeModalProps) => {
         justifyContent: 'center',
       }}
     >
-      <BookedBike bike={bike} />
+      <Box>
+        <BookedBike bike={bike} />
+      </Box>
     </Modal>
   )
 }

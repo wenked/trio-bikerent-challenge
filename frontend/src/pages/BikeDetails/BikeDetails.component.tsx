@@ -218,6 +218,7 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
             total={total}
             handleBikeBooking={handleBikeBooking}
             isLoading={isLoading}
+            data-testid='booking-overview'
           />
         )}
         {bike && isMobile && bookedBike ? (

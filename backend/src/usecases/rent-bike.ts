@@ -19,10 +19,8 @@ export class RentBike {
     bikeRentHistory: BikeRentHistory,
     candidateToken: string
   ): Promise<BikeRentHistory> {
-    console.log({ bikeRentHistory, candidateToken });
     const candidate = await this.candidateRepository.findByToken(candidateToken);
 
-    console.log({ candidate });
     if (!candidate) throw new UnauthorizedError();
 
     const bike = await this.bikeRepository.findById(bikeRentHistory.bikeId);
@@ -40,12 +38,9 @@ export class RentBike {
 
     const returnDate = new Date(bikeRentHistory.returnDate);
     const rentDate = new Date(bikeRentHistory.rentDate);
-    console.log({ returnDate, rentDate });
     const rentPeriod = returnDate.getTime() - rentDate.getTime();
 
-    console.log({ rentPeriod });
     const rentPeriodInDays = Math.ceil(rentPeriod / (1000 * 3600 * 24));
-    console.log({ rentPeriodInDays });
     const isLessThan24Hours = rentPeriod < 24 * 60 * 60 * 1000;
 
     if (isLessThan24Hours) throw new InvalidRentBikePeriodError();
@@ -54,13 +49,6 @@ export class RentBike {
 
     const rentFee = rentCost * 0.15;
     bikeRentHistory.cost = Math.ceil((rentCost + rentFee) * 100); // in cents
-
-    console.log({
-      rentCost,
-      rentFee,
-      cost: bikeRentHistory.cost,
-      convertedCost: bikeRentHistory.cost / 100,
-    });
 
     bikeRentHistory.candidateId = candidate.id;
     bikeRentHistory.status = 'RENTED';

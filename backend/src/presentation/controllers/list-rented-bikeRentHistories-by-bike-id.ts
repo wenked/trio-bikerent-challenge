@@ -8,7 +8,7 @@ export class ListRentedBikeRentHistoriesByIdController implements Controller {
   async handle(request: HttpRequest): Promise<HttpResponse> {
     try {
       const candidateToken = request.token;
-      const bikeId = request.params?.id;
+      const bikeId = Number(request.params?.id);
 
       const bikesRentHitories = await this.useCase.perform(bikeId, candidateToken);
       return {
@@ -16,6 +16,7 @@ export class ListRentedBikeRentHistoriesByIdController implements Controller {
         body: bikesRentHitories,
       };
     } catch (error) {
+      console.error(error);
       const userUnauthorized = error.constructor.name === 'UnauthorizedError';
 
       if (userUnauthorized) {

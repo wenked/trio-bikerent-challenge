@@ -1,6 +1,4 @@
 import { ListRentedBikeHistoriesByBikeId } from '@/usecases/list-bike-rented-bikeRentHistory';
-import { BikeRentHistoryRepository } from '@/usecases/ports/bikeRentHistory-repository';
-import { CandidateRepository } from '@/usecases/ports/candidate-repository';
 import { BikeBuilder } from '@test/builders/bike-builder';
 import { BikeRentHistoryBuilder } from '@test/builders/bikeRentHistory-builder';
 import { CandidateBuilder } from '@test/builders/candidate-builder';
@@ -9,17 +7,12 @@ import { InMemoryBikeRentHistoryRepository } from '@test/doubles/in-memory-bikeR
 import { InMemoryCandidateRepository } from '@test/doubles/in-memory-candidate-repository';
 
 describe('ListRentedBikeHistoriesByBikeId', () => {
-  let useCase: ListRentedBikeHistoriesByBikeId;
-  let bikeRentHistoryRepository: BikeRentHistoryRepository;
-  let candidateRepository: CandidateRepository;
-
   it('should return the list of rented bikeRentHistories when the candidate is authorized', async () => {
     const candidateRepository = new InMemoryCandidateRepository();
     const bikeRentHistoryRepository = new InMemoryBikeRentHistoryRepository();
     const bikeRepository = new InMemoryBikeRepository();
 
     const candidate = new CandidateBuilder().withToken().withId().build();
-    console.log({ candidate });
     const bike = new BikeBuilder().withId().build();
     await bikeRepository.add({ id: bike.id, candidateId: candidate.id, ...bike });
     const addedCandidate = await candidateRepository.add(candidate);

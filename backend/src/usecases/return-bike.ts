@@ -13,7 +13,6 @@ export class ReturnBike {
   async perform(id: number, candidateToken: string): Promise<BikeRentHistory> {
     const candidate = await this.candidateRepository.findByToken(candidateToken);
 
-    console.log({ candidate });
     if (!candidate) throw new UnauthorizedError();
 
     const bikeRentHistory = await this.bikeRentHistoryRepository.findById(id);

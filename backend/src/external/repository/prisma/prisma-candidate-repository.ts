@@ -22,14 +22,12 @@ export class PrismaCandidateRepository implements CandidateRepository {
   }
 
   async findByToken(token: string): Promise<Candidate | undefined> {
-    console.log({ token });
     const candidate = await prismaClient.candidate.findUnique({
       where: { token },
     });
 
     if (!candidate) return undefined;
 
-    console.log({ candidate });
     return candidate;
   }
 }

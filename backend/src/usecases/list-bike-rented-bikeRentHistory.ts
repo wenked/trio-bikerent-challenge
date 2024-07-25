@@ -11,7 +11,6 @@ export class ListRentedBikeHistoriesByBikeId implements UseCase {
   ) {}
 
   async perform(bikeId: number, candidateToken: string): Promise<BikeRentHistory[]> {
-    console.log({ bikeId, candidateToken });
     const candidate = await this.candidateRepository.findByToken(candidateToken);
     if (!candidate) throw new UnauthorizedError();
 

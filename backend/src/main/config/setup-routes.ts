@@ -17,9 +17,9 @@ export function setupRoutes(app: Express): void {
   createListUsersRoute(router);
   createCreateUserRoute(router);
   createCreateCandidateRoute(router);
-  rentBikeRoute(router);
-  returnBikeRoute(router);
-  listRentedBikeHistoriesByBikeIdRoute(router);
+  createRentBikeRoute(router);
+  createReturnBikeRoute(router);
+  createListRentedBikeHistoriesByBikeIdRoute(router);
 }
 
 function createListBikesRoute(router: Router) {
@@ -30,15 +30,15 @@ function createListAvailableBikesRoute(router: Router) {
   router.get('/bikes/available', adaptRoute(makeListAvailableBikesController()));
 }
 
-function rentBikeRoute(router: Router) {
+function createRentBikeRoute(router: Router) {
   router.post('/bikes/rent', adaptRoute(makeRentBikeController()));
 }
 
-function listRentedBikeHistoriesByBikeIdRoute(router: Router) {
+function createListRentedBikeHistoriesByBikeIdRoute(router: Router) {
   router.get('/bikes/rented/:id', adaptRoute(makeListRentedBikeRentHitoriesByIdController()));
 }
 
-function returnBikeRoute(router: Router) {
+function createReturnBikeRoute(router: Router) {
   router.post('/bikes/return', adaptRoute(makeReturnBikeController()));
 }
 
